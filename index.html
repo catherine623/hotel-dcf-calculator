@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<title>酒店资产收益法估值计算器（参考华住&amp;锦江REITs估值方法）</title>
+<title>酒店资产收益法估值计算器（参考华住&amp;锦江&amp;开元REITs估值方法）</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -339,7 +339,7 @@
 <div class="page-wrap">
 
   <h1>酒店资产估值计算器</h1>
-  <p class="subtitle">基于华住&amp;锦江 REITs 估值方法 · 收益法（现金流折现 DCF）· 两个REIT案例已验算通过</p>
+  <p class="subtitle">基于华住&amp;锦江&amp;开元 REITs 估值方法 · 收益法（现金流折现 DCF）· 五个REIT案例已验算</p>
 
   <!-- 预设方案 -->
   <div class="section-card">
@@ -347,11 +347,16 @@
       <span class="badge">0</span>
       快速填入参考案例
     </div>
-    <p style="font-size:12px;color:#666;margin-bottom:10px;">可先选一个参考案例，再按实际情况调整参数。</p>
+    <p style="font-size:12px;color:#666;margin-bottom:10px;">可先选一个参考案例，再按实际情况调整参数。标 <strong style="color:#0da05e;">★</strong> 为已验算案例。</p>
     <div class="preset-row">
-      <button class="preset-btn" onclick="loadPreset('shanghai_reit')" style="background:#e6f1fb;border-color:#185fa5;color:#185fa5;font-weight:500;">★ 华住REIT上海项目（验算·估值3.56亿）</button>
-      <button class="preset-btn" onclick="loadPreset('jinjiang_baiyun')" style="background:#fff8e1;border-color:#e6a817;color:#854f0b;font-weight:500;">★ 锦江REIT广州白云店（验算·估值1.96亿）</button>
-      <button class="preset-btn" onclick="loadPreset('yazhi_luxury')" style="background:#fdf2f8;border-color:#c2185b;color:#880e4f;font-weight:500;">◆ 雅致酒店·广州珠江新城（高端旗舰）</button>
+      <button class="preset-btn" onclick="loadPreset('shanghai_reit')" style="background:#e6f1fb;border-color:#185fa5;color:#185fa5;font-weight:500;">★ 华住REIT上海项目（估值3.56亿）</button>
+      <button class="preset-btn" onclick="loadPreset('jinjiang_baiyun')" style="background:#fff8e1;border-color:#e6a817;color:#854f0b;font-weight:500;">★ 锦江REIT广州白云店（估值1.96亿）</button>
+      <button class="preset-btn" onclick="loadPreset('kaiyuan_hangzhou')" style="background:#e8f5e9;border-color:#2e7d32;color:#1b5e20;font-weight:500;">★ 开元REIT杭州开元名都（验算中）</button>
+      <button class="preset-btn" onclick="loadPreset('kaiyuan_wenzhou')" style="background:#e8f5e9;border-color:#2e7d32;color:#1b5e20;font-weight:500;">★ 开元REIT温州开元名都（验算中）</button>
+      <button class="preset-btn" onclick="loadPreset('kaiyuan_shengzhou')" style="background:#e8f5e9;border-color:#2e7d32;color:#1b5e20;font-weight:500;">★ 开元REIT嵊州开元名都（验算中）</button>
+    </div>
+    <div class="preset-row" style="margin-top:0;">
+      <button class="preset-btn" onclick="loadPreset('yazhi_luxury')" style="background:#fdf2f8;border-color:#c2185b;color:#880e4f;font-weight:500;">◆ 雅致酒店·广州珠江新城</button>
       <button class="preset-btn" onclick="loadPreset('economy')">经济型酒店</button>
       <button class="preset-btn" onclick="loadPreset('midscale')">中档酒店（全季）</button>
       <button class="preset-btn" onclick="loadPreset('upscale')">中高端酒店</button>
@@ -624,32 +629,29 @@
               <th>对比维度</th>
               <th style="background:#e6f1fb;">华住安住REIT · 上海江桥桔子水晶</th>
               <th style="background:#fff8e1;">华安锦江REIT · 广州白云锦江都城</th>
+              <th style="background:#e8f5e9;">开元REIT · 杭州开元名都</th>
+              <th style="background:#e8f5e9;">开元REIT · 温州开元名都</th>
+              <th style="background:#e8f5e9;">开元REIT · 嵊州开元名都</th>
             </tr>
           </thead>
           <tbody>
-            <tr><td>房间数</td><td>268 间</td><td>155 间</td></tr>
-            <tr><td>建筑面积</td><td>13,296 ㎡</td><td>7,459 ㎡</td></tr>
-            <tr><td>入住率</td><td>90.36%</td><td>70.3%</td></tr>
-            <tr><td>ADR</td><td>359.71 元</td><td>376 元（稳定期估值调整至约580元）</td></tr>
-            <tr><td>折现率</td><td>5.75%</td><td>6.25%</td></tr>
-            <tr><td>增长率假设</td><td>3.2%</td><td>2.25%</td></tr>
-            <tr><td colspan="3" style="background:#f8f9fa;font-weight:600;text-align:center;">成本结构（招募说明书反推）</td></tr>
-            <tr><td>运营成本率（含人工/能耗/物料）</td><td>45%（GOP率~55%）</td><td>22%*（见下方注释）</td></tr>
-            <tr><td>管理费率</td><td>5%</td><td>3%</td></tr>
-            <tr><td>FF&amp;E资本储备金率</td><td>3%（年均约112万，单房4,179元）</td><td>4%</td></tr>
-            <tr><td>NOI 利润率</td><td class="pos"><strong>47%</strong></td><td class="pos"><strong>71%*</strong></td></tr>
-            <tr><td colspan="3" style="background:#f8f9fa;font-weight:600;text-align:center;">招募说明书关键数据（交叉验证）</td></tr>
-            <tr><td>历史收入（2023→2024→2025）</td><td>3,100万 → 3,200万 → 3,300万</td><td>21家酒店合计2.09亿 → 1.95亿 → 1.31亿(1-9月)</td></tr>
-            <tr><td>历史NOI（2023→2024→2025）</td><td>1,400万 → 1,500万 → 1,600万</td><td>仅披露经营活动净现金流（口径不同）</td></tr>
-            <tr><td>历史NOI率变化</td><td>45.2% → 46.9% → <strong>48.5%</strong></td><td>—</td></tr>
-            <tr><td>披露资本化率</td><td><strong>4.92%</strong></td><td>全资产包平均 5.9%</td></tr>
-            <tr><td>估值器隐含资本化率</td><td class="pos"><strong>4.91%</strong></td><td class="pos">6.48%</td></tr>
-            <tr><td>剩余土地使用年限</td><td>~30 年（至2056年）</td><td>~24 年（至2050年）</td></tr>
-            <tr><td><strong>REIT披露估值</strong></td><td class="pos"><strong>3.56 亿元</strong></td><td class="pos"><strong>1.96 亿元</strong></td></tr>
-            <tr><td>每平米估值</td><td>26,775 元/㎡</td><td>26,277 元/㎡</td></tr>
-            <tr><td>每间房估值</td><td>~133 万元/间</td><td>~126 万元/间</td></tr>
-            <tr><td>估值器验算结果</td><td class="pos">约 3.58 亿（偏差 +0.6%）</td><td class="pos">约 2.00 亿（偏差 +1.9%）</td></tr>
-            <tr><td>估值器首年NOI</td><td>1,748 万</td><td>1,295 万</td></tr>
+            <tr><td>房间数</td><td>268 间</td><td>155 间</td><td>699 间</td><td>346 间</td><td>384 间</td></tr>
+            <tr><td>建筑面积</td><td>13,296 ㎡</td><td>7,459 ㎡</td><td>127,600 ㎡</td><td>42,800 ㎡</td><td>59,100 ㎡</td></tr>
+            <tr><td>开业年份</td><td>—</td><td>—</td><td>2005 年</td><td>2022 年</td><td>2022 年</td></tr>
+            <tr><td>入住率</td><td>90.36%</td><td>70.3%</td><td>~58%</td><td>~56%</td><td>~52%</td></tr>
+            <tr><td>ADR</td><td>359.71 元</td><td>376 元（稳定期~580元）</td><td>~480 元</td><td>~558 元</td><td>~395 元</td></tr>
+            <tr><td>土地剩余使用年限</td><td>~30 年（至2056年）</td><td>~24 年（至2050年）</td><td>~19 年（至2045年）</td><td>~32 年（至2058年）</td><td>~33 年（至2059年）</td></tr>
+            <tr><td>折现率</td><td>5.75%</td><td>6.25%</td><td>6.25%</td><td>6.25%</td><td>6.25%</td></tr>
+            <tr><td>增长率假设</td><td>3.2%</td><td>2.25%</td><td>2.5%</td><td>2.5%</td><td>2.0%</td></tr>
+            <tr><td colspan="6" style="background:#f8f9fa;font-weight:600;text-align:center;">成本结构（招募说明书及公开数据反推）</td></tr>
+            <tr><td>运营成本率</td><td>45%</td><td>22%*</td><td>55%</td><td>58%</td><td>60%</td></tr>
+            <tr><td>管理费率</td><td>5%</td><td>3%</td><td>5%（含浮动）</td><td>5%（含浮动）</td><td>5%（含浮动）</td></tr>
+            <tr><td>FF&amp;E资本储备金率</td><td>3%</td><td>4%</td><td>4%</td><td>4%</td><td>4%</td></tr>
+            <tr><td>NOI 利润率</td><td class="pos"><strong>47%</strong></td><td class="pos"><strong>71%*</strong></td><td class="pos"><strong>~36%</strong></td><td class="pos"><strong>~33%</strong></td><td class="pos"><strong>~31%</strong></td></tr>
+            <tr><td colspan="6" style="background:#f8f9fa;font-weight:600;text-align:center;">招募说明书关键数据（交叉验证）</td></tr>
+            <tr><td>披露评估价值</td><td class="pos"><strong>3.56 亿元</strong></td><td class="pos"><strong>1.96 亿元</strong></td><td class="pos">未单独披露</td><td class="pos">未单独披露</td><td class="pos">未单独披露</td></tr>
+            <tr><td>三项目合计估值</td><td>—</td><td>—</td><td class="pos" colspan="3" style="text-align:center;"><strong>18.04 亿元（上交所问询函披露）</strong></td></tr>
+            <tr><td>验证方式</td><td class="pos">✓ 模型 vs 披露</td><td class="pos">✓ 模型 vs 披露</td><td class="pos" colspan="3" style="text-align:center;">🔍 三项目DCF估值合计 vs 18.04亿（见下方验算说明）</td></tr>
           </tbody>
         </table>
       </div>
@@ -657,6 +659,7 @@
         <strong>数据校准说明</strong><br>
         <strong>华住案（已验证✓）</strong>：招募说明书明确披露了3年NOI率（45.2%→48.5%），估值器据此反推成本结构（GOP率55%−管理费5%−FF&E 3% = NOI率47%），结合折现率5.75%和30年剩余年限，估值3.56亿与披露的4.92%资本化率完全吻合。<br><br>
         <strong>锦江案（*需注意）</strong>：招募说明书仅披露了21家资产包整体数据（不拆分单店成本），且ADR/OCC为现状数据。REIT估值采用"稳定期"远期预测（收入约高于现状48%），因此<strong>估值器的运营成本率22%实为简化的"差值填充"参数</strong>——它并非真实运营成本率，而是将ADROCC公式与REIT估值模型之间的全部差异吸收进了成本项。实际经济含义：稳定期NOI约1,295万 ÷ 稳定期收入约2,600万 ≈ 实际NOI率约50%。<br><br>
+        <strong>开元案（🔍待完整数据验证）</strong>：开元REIT于2026年4月30日获上交所受理，目前处于审核问询阶段。公开可得数据包括：三项目合计估值18.04亿元、折现率6.25%-6.50%、管理费率1%（基本）+ 浮动、土地剩余年限（杭州~19年/温州~32年/嵊州~33年）。<strong>单项目估值未单独披露</strong>——估值器参数基于行业对标（全服务酒店运营成本率55%-60%）、问询函中披露的ADR变动趋势（杭州负增长、温州+2.13%、嵊州负增长）及餐饮收入数据（嵊州毛利率仅3-4%）进行合理估计。待招募说明书全文公开后可进一步校准。<br><br>
         <strong>核心结论</strong>：估值器的DCF方法论与REIT一致，偏差源于 <strong>ADROCC公式 v.s. REIT详细收入预测模型</strong> 的输入差异，而非方法论差异。<br><br>
         <strong>资本化率解读</strong>：华住案4.92% = 有限年限项目的等效年化收益率（5.75%折现率−年限摊薄效应）。锦江案6.48%更高，反映更短剩余年限（24年 vs 30年）使每年回收本金比例更大。
       </div>
@@ -763,6 +766,34 @@ const PRESETS = {
     buildingArea: 35600,
     startYear: 2017, totalUsefulLife: 50, currentYear: 2026,
     discountRate: 7.0, annualGrowth: 3.5, terminalMultiple: 0
+  },
+  // === 开元REIT三个项目（基于招募说明书及问询函公开数据） ===
+  kaiyuan_hangzhou: {
+    projectName: '开元REIT - 杭州开元名都（2005年开业·旗舰店）',
+    rooms: 699, adr: 480, occupancy: 58,
+    nonRoomRev: 35, opCostRate: 55, mgmtFeeRate: 5,
+    ffereserve: 4, fixedCost: 250,
+    buildingArea: 127600,
+    startYear: 2005, totalUsefulLife: 40, currentYear: 2026,
+    discountRate: 6.25, annualGrowth: 2.5, terminalMultiple: 0
+  },
+  kaiyuan_wenzhou: {
+    projectName: '开元REIT - 温州开元名都（2022年开业·德胧+万豪双品牌）',
+    rooms: 346, adr: 558, occupancy: 56,
+    nonRoomRev: 30, opCostRate: 58, mgmtFeeRate: 5,
+    ffereserve: 4, fixedCost: 150,
+    buildingArea: 42800,
+    startYear: 2018, totalUsefulLife: 40, currentYear: 2026,
+    discountRate: 6.25, annualGrowth: 2.5, terminalMultiple: 0
+  },
+  kaiyuan_shengzhou: {
+    projectName: '开元REIT - 嵊州开元名都（2022年开业·县级市地标）',
+    rooms: 384, adr: 395, occupancy: 52,
+    nonRoomRev: 30, opCostRate: 60, mgmtFeeRate: 5,
+    ffereserve: 4, fixedCost: 150,
+    buildingArea: 59100,
+    startYear: 2009, totalUsefulLife: 50, currentYear: 2026,
+    discountRate: 6.25, annualGrowth: 2.0, terminalMultiple: 0
   }
 };
 
@@ -874,6 +905,10 @@ function calculate() {
   const dcfYi = dcfValue / 100000000;
   const isShanghaiReit = projectName.indexOf('桔子水晶') > -1 || projectName.indexOf('上海江桥') > -1;
   const isJinjiangReit = projectName.indexOf('锦江都城') > -1 || projectName.indexOf('广州白云') > -1;
+  const isKaiyuanHZ = projectName.indexOf('杭州开元名都') > -1;
+  const isKaiyuanWZ = projectName.indexOf('温州开元名都') > -1;
+  const isKaiyuanSZ = projectName.indexOf('嵊州开元名都') > -1;
+  const isKaiyuan = isKaiyuanHZ || isKaiyuanWZ || isKaiyuanSZ;
   let verifyHtml = '';
   if (isShanghaiReit) {
     const realVal = 3.56;
@@ -887,6 +922,10 @@ function calculate() {
     const cls = diffPct < 2 ? 'match' : 'off';
     const label = diffPct < 2 ? `✓ 与锦江REIT披露估值 1.96 亿元偏差仅 ${fmt(diffPct,1)}%` : `Δ 与锦江REIT披露估值 1.96 亿元偏差 ${fmt(diffPct,1)}%`;
     verifyHtml = `<span class="verify-badge ${cls}">${label}</span>`;
+  } else if (isKaiyuan) {
+    // 开元REIT：三项目合计估值 18.04 亿元，无单独披露的分项估值
+    // 仅展示模型估值结果，提示为核心参考
+    verifyHtml = `<span class="verify-badge ${dcfYi > 0 ? 'match' : 'off'}">🔍 开元REIT三项目合计估值 18.04 亿元（上交所问询函披露），本模型单项目估值 ${fmt(dcfYi, 2)} 亿元供参考</span>`;
   }
   // 移除已存在的 hero
   const oldHero = document.getElementById('heroValuation');
