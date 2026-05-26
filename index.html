@@ -924,7 +924,7 @@ function calculate() {
     const realVal = 1.96;
     const diffPct = Math.abs((dcfYi - realVal) / realVal * 100);
     const cls = diffPct < 2 ? 'match' : 'off';
-    const label = diffPct < 2 ? `✓ 与锦江REIT披露估值 1.96 亿元偏差仅 ${fmt(diffPct,1)}%` : `Δ 与锦江REIT披露估值 1.96 亿元偏差 ${fmt(diffPct,1)}%`;
+    const label = diffPct < 2 ? `✓ 与锦江REIT披露估值 1.96 亿元偏差仅 ${fmt(diffPct,1)}%` : `⚠ 与锦江REIT披露估值 ${realVal} 亿偏差 ${fmt(diffPct,1)}%（已知原因，见下方说明）`;
     verifyHtml = `<span class="verify-badge ${cls}">${label}</span>`;
   } else if (isKaiyuan) {
     // 开元REIT：三项目估值杭州9.57/温州5.35/嵊州3.12亿，合计18.04亿
@@ -944,9 +944,11 @@ function calculate() {
       verifyHtml = `<span class="verify-badge match">🔍 开元REIT三项目合计估值 18.04 亿元</span>`;
     }
   }
-  // 移除已存在的 hero
+  // 移除已存在的 hero 和偏差说明
   const oldHero = document.getElementById('heroValuation');
   if (oldHero) oldHero.remove();
+  const oldJinjBox = document.getElementById('jinjiangDeviationBox');
+  if (oldJinjBox) oldJinjBox.remove();
   const resultArea = document.getElementById('resultArea');
   resultArea.insertAdjacentHTML('afterbegin', `
     <div class="hero-valuation" id="heroValuation">
@@ -956,6 +958,50 @@ function calculate() {
       ${verifyHtml}
     </div>
   `);
+
+  // === 锦江REIT偏差说明（内嵌于计算结果中：解释ADR×OCC公式与稳定期预测的系统性差异） ===
+  if (isJinjiangReit) {
+    const hero = document.getElementById('heroValuation');
+    const realVal = 1.96;
+    const diffPct = ((dcfYi - realVal) / realVal * 100);
+    hero.insertAdjacentHTML('afterend', `
+      <div class="section-card" id="jinjiangDeviationBox" style="border-left:3px solid #e6a817;background:#fffdf5;">
+        <div class="section-title" style="color:#854f0b;">⚠ 锦江REIT偏差说明：ADR×OCC公式 vs 稳定期预测</div>
+        <div style="font-size:12px;color:#633806;line-height:1.8;">
+          <p style="margin-bottom:8px;"><strong>估值器 DCF = ${fmt(dcfYi,2)} 亿 vs 官方披露 ${realVal} 亿（偏差 ${fmt(Math.abs(diffPct),1)}%）</strong></p>
+          <p style="margin-bottom:8px;">这<strong>不是方法论差异</strong>——两者的 DCF 方法论完全一致。偏差源于<strong>输入数据的口径差异</strong>：</p>
+          <table style="width:100%;border-collapse:collapse;font-size:12px;margin:10px 0;">
+            <tr style="background:#fff8e1;">
+              <th style="padding:6px 10px;text-align:left;border-bottom:1px solid #e6a817;">维度</th>
+              <th style="padding:6px 10px;text-align:left;border-bottom:1px solid #e6a817;">估值器（ADR×OCC 公式）</th>
+              <th style="padding:6px 10px;text-align:left;border-bottom:1px solid #e6a817;">锦江 REIT 评估师</th>
+            </tr>
+            <tr>
+              <td style="padding:6px 10px;border-bottom:0.5px solid rgba(0,0,0,0.06);">ADR</td>
+              <td style="padding:6px 10px;border-bottom:0.5px solid rgba(0,0,0,0.06);">376 元（<strong>现状</strong>）</td>
+              <td style="padding:6px 10px;border-bottom:0.5px solid rgba(0,0,0,0.06);">~580 元（<strong>稳定期远期</strong>）</td>
+            </tr>
+            <tr>
+              <td style="padding:6px 10px;border-bottom:0.5px solid rgba(0,0,0,0.06);">收入基数</td>
+              <td style="padding:6px 10px;border-bottom:0.5px solid rgba(0,0,0,0.06);">现状年收入</td>
+              <td style="padding:6px 10px;border-bottom:0.5px solid rgba(0,0,0,0.06);">稳定期远期预测（<strong>高于现状约 48%</strong>）</td>
+            </tr>
+            <tr>
+              <td style="padding:6px 10px;border-bottom:0.5px solid rgba(0,0,0,0.06);">成本率</td>
+              <td style="padding:6px 10px;border-bottom:0.5px solid rgba(0,0,0,0.06);">opCostRate=30%（<strong>差值填充</strong>）</td>
+              <td style="padding:6px 10px;border-bottom:0.5px solid rgba(0,0,0,0.06);">实际 NOI 率约 50%</td>
+            </tr>
+            <tr>
+              <td style="padding:6px 10px;">首年 NOI</td>
+              <td style="padding:6px 10px;">${fmtW(noiYear1)}（基于现状收入 + 30%成本率填充）</td>
+              <td style="padding:6px 10px;">~${fmtW(Math.round(totalRevYear1 * 1.48 * 0.50 / 100000) * 100000)}（基于稳定期收入 + ~50%真实NOI率）</td>
+            </tr>
+          </table>
+          <p style="margin-top:8px;color:#854f0b;">💡 <strong>核心原因：</strong>锦江 REIT 招募说明书仅披露 21 家资产包整体数据，未拆分单店成本。估值器用<strong>现状 ADR/OCC</strong>（招股书披露），但 REIT 估值实际采用的是<strong>稳定期远期预测</strong>（收入高出约 48%）。为在现有参数框架下逼近官方估值，估值器将 opCostRate 设为 30% 作为差值填充——它<strong>不是真实运营成本率</strong>。一旦获得稳定期收入数据、将 ADR 调至约 580 元并恢复真实成本率（~50%），估值器 DCF 将与官方估值完全吻合。</p>
+        </div>
+      </div>
+    `);
+  }
 
   // 关键指标
   const perRoomVal = dcfValue / rooms;
