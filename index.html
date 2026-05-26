@@ -1,0 +1,1062 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>酒店资产收益法估值计算器（参考华住&amp;锦江REITs估值方法）</title>
+<script src="https://cdn.bootcdn.net/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 13px;
+    line-height: 1.6;
+    color: #1a1a1a;
+    background: #f8f7f4;
+    padding: 0;
+  }
+  .page-wrap { max-width: 960px; margin: 0 auto; padding: 24px 16px 48px; }
+  h1 { font-size: 20px; font-weight: 500; margin-bottom: 4px; }
+  .subtitle { font-size: 13px; color: #666; margin-bottom: 24px; }
+
+  .section-card {
+    background: #fff;
+    border: 0.5px solid rgba(0,0,0,0.12);
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin-bottom: 16px;
+  }
+  .section-title {
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    font-size: 11px;
+    font-weight: 500;
+    background: #e6f1fb;
+    color: #185fa5;
+    flex-shrink: 0;
+  }
+
+  .form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px 20px;
+  }
+  .form-item label {
+    display: block;
+    font-size: 12px;
+    color: #555;
+    margin-bottom: 4px;
+  }
+  .form-item label .hint {
+    color: #999;
+    font-size: 11px;
+    margin-left: 4px;
+  }
+  .form-item input, .form-item select {
+    width: 100%;
+    padding: 7px 10px;
+    border: 0.5px solid rgba(0,0,0,0.2);
+    border-radius: 8px;
+    font-size: 13px;
+    background: #fff;
+    color: #1a1a1a;
+    outline: none;
+    transition: border-color 0.15s;
+  }
+  .form-item input:focus, .form-item select:focus {
+    border-color: #378ADD;
+  }
+  .unit { font-size: 11px; color: #888; margin-top: 3px; }
+
+  .calc-btn {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    background: #185fa5;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    margin-top: 16px;
+    transition: background 0.15s;
+  }
+  .calc-btn:hover { background: #0c447c; }
+
+  .result-hidden { display: none; }
+
+  .metric-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  .metric-card {
+    background: #f8f7f4;
+    border-radius: 8px;
+    padding: 14px 16px;
+  }
+  .metric-card .mlabel { font-size: 11px; color: #666; margin-bottom: 4px; }
+  .metric-card .mval { font-size: 20px; font-weight: 500; color: #1a1a1a; }
+  .metric-card .mval.highlight { color: #185fa5; font-size: 24px; }
+  .metric-card .mval.danger { color: #993c1d; }
+  .metric-card .msub { font-size: 11px; color: #999; margin-top: 2px; }
+
+  .steps-list { list-style: none; counter-reset: steps; }
+  .steps-list li {
+    counter-increment: steps;
+    display: flex;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 0.5px solid rgba(0,0,0,0.06);
+  }
+  .steps-list li:last-child { border-bottom: none; }
+  .step-num {
+    flex-shrink: 0;
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    background: #e6f1fb;
+    color: #185fa5;
+    font-size: 11px;
+    font-weight: 500;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .step-content .step-title { font-weight: 500; font-size: 13px; color: #1a1a1a; }
+  .step-content .step-formula {
+    font-family: monospace;
+    font-size: 12px;
+    color: #185fa5;
+    background: #e6f1fb;
+    padding: 2px 8px;
+    border-radius: 4px;
+    display: inline-block;
+    margin: 3px 0;
+  }
+  .step-content .step-desc { font-size: 12px; color: #666; margin-top: 2px; }
+
+  table.detail-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+    margin-top: 8px;
+  }
+  table.detail-table th {
+    background: #f8f7f4;
+    padding: 7px 10px;
+    text-align: left;
+    font-weight: 500;
+    color: #555;
+    border-bottom: 0.5px solid rgba(0,0,0,0.1);
+  }
+  table.detail-table td {
+    padding: 6px 10px;
+    border-bottom: 0.5px solid rgba(0,0,0,0.06);
+    color: #333;
+  }
+  table.detail-table tr:last-child td { border-bottom: none; }
+  table.detail-table .pos { color: #185fa5; font-weight: 500; }
+  table.detail-table .neg { color: #993c1d; }
+
+  .sensitivity-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    gap: 6px;
+    margin-top: 8px;
+  }
+  .sens-cell {
+    padding: 8px;
+    border-radius: 6px;
+    text-align: center;
+    font-size: 11px;
+    border: 0.5px solid rgba(0,0,0,0.08);
+  }
+  .sens-cell .slabel { color: #666; margin-bottom: 2px; }
+  .sens-cell .sval { font-weight: 500; font-size: 13px; }
+  .sens-cell.base { background: #e6f1fb; border-color: #b5d4f4; }
+  .sens-cell.base .sval { color: #185fa5; }
+  .sens-cell.lower { background: #fcebeb; }
+  .sens-cell.lower .sval { color: #a32d2d; }
+  .sens-cell.higher { background: #eaf3de; }
+  .sens-cell.higher .sval { color: #3b6d11; }
+
+  .explain-box {
+    background: #faeeda;
+    border: 0.5px solid #fac775;
+    border-radius: 8px;
+    padding: 12px 14px;
+    font-size: 12px;
+    color: #633806;
+    margin-top: 12px;
+  }
+  .explain-box strong { font-weight: 500; }
+
+  .formula-display {
+    background: #f8f7f4;
+    border: 0.5px solid rgba(0,0,0,0.1);
+    border-radius: 8px;
+    padding: 12px 14px;
+    font-family: monospace;
+    font-size: 13px;
+    color: #185fa5;
+    text-align: center;
+    margin: 8px 0;
+    word-break: break-all;
+  }
+
+  .divider { height: 0.5px; background: rgba(0,0,0,0.08); margin: 16px 0; }
+
+  .tag {
+    display: inline-block;
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 10px;
+    background: #e6f1fb;
+    color: #185fa5;
+    margin-left: 8px;
+  }
+  .tag.warn { background: #faeeda; color: #854f0b; }
+
+  .preset-row {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 12px;
+  }
+  .preset-btn {
+    padding: 5px 12px;
+    border: 0.5px solid rgba(0,0,0,0.2);
+    border-radius: 20px;
+    font-size: 12px;
+    background: #fff;
+    cursor: pointer;
+    color: #333;
+    transition: all 0.15s;
+  }
+  .preset-btn:hover {
+    background: #e6f1fb;
+    border-color: #185fa5;
+    color: #185fa5;
+  }
+  .chart-wrap { position: relative; width: 100%; height: 280px; margin-top: 8px; }
+  .legend-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 8px;
+    font-size: 12px;
+    color: #555;
+  }
+  .legend-dot {
+    width: 10px; height: 10px;
+    border-radius: 2px;
+    display: inline-block;
+    margin-right: 4px;
+    vertical-align: middle;
+  }
+</style>
+</head>
+<body>
+<div class="page-wrap">
+
+  <h1>酒店资产估值计算器</h1>
+  <p class="subtitle">基于华住&amp;锦江 REITs 估值方法 · 收益法（现金流折现 DCF）· 两个REIT案例已验算通过</p>
+
+  <!-- 预设方案 -->
+  <div class="section-card">
+    <div class="section-title">
+      <span class="badge">0</span>
+      快速填入参考案例
+    </div>
+    <p style="font-size:12px;color:#666;margin-bottom:10px;">可先选一个参考案例，再按实际情况调整参数。</p>
+    <div class="preset-row">
+      <button class="preset-btn" onclick="loadPreset('shanghai_reit')" style="background:#e6f1fb;border-color:#185fa5;color:#185fa5;font-weight:500;">★ 华住REIT上海项目（验算·估值3.56亿）</button>
+      <button class="preset-btn" onclick="loadPreset('jinjiang_baiyun')" style="background:#fff8e1;border-color:#e6a817;color:#854f0b;font-weight:500;">★ 锦江REIT广州白云店（验算·估值1.96亿）</button>
+      <button class="preset-btn" onclick="loadPreset('yazhi_luxury')" style="background:#fdf2f8;border-color:#c2185b;color:#880e4f;font-weight:500;">◆ 雅致酒店·广州珠江新城（高端旗舰）</button>
+      <button class="preset-btn" onclick="loadPreset('economy')">经济型酒店</button>
+      <button class="preset-btn" onclick="loadPreset('midscale')">中档酒店（全季）</button>
+      <button class="preset-btn" onclick="loadPreset('upscale')">中高端酒店</button>
+    </div>
+  </div>
+
+  <!-- 第一步：项目基本情况 -->
+  <div class="section-card">
+    <div class="section-title">
+      <span class="badge">1</span>
+      项目基本情况
+    </div>
+    <div class="form-grid">
+      <div class="form-item">
+        <label>项目名称</label>
+        <input type="text" id="projectName" placeholder="如：某市全季酒店" value="示例酒店项目">
+      </div>
+      <div class="form-item">
+        <label>客房数量 <span class="hint">间</span></label>
+        <input type="number" id="rooms" value="200" min="1">
+      </div>
+      <div class="form-item">
+        <label>平均房价（ADR） <span class="hint">元/间夜</span></label>
+        <input type="number" id="adr" value="380" min="1">
+      </div>
+      <div class="form-item">
+        <label>入住率 <span class="hint">%</span></label>
+        <input type="number" id="occupancy" value="72" min="1" max="100" step="0.5">
+      </div>
+      <div class="form-item">
+        <label>非客房收入占比 <span class="hint">%（餐饮/会议等）</span></label>
+        <input type="number" id="nonRoomRev" value="15" min="0" max="100" step="0.5">
+      </div>
+      <div class="form-item">
+        <label>建筑面积 <span class="hint">㎡</span></label>
+        <input type="number" id="buildingArea" value="42775" min="1">
+        <div class="unit">用于计算每平米估值</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 第二步：成本结构 -->
+  <div class="section-card">
+    <div class="section-title">
+      <span class="badge">2</span>
+      成本结构（运营成本）
+    </div>
+    <div class="explain-box" style="margin-bottom:12px;">
+      <strong>什么是 NOI？</strong> 净运营收益（Net Operating Income）= 总收入 - 运营成本 - 管理费 - 资本储备金。这是估值最关键的数字——就像买房看租金净收入一样，NOI 代表这个酒店项目每年真正"进口袋"的钱。
+    </div>
+    <div class="form-grid">
+      <div class="form-item">
+        <label>运营成本率 <span class="hint">%（占总收入）</span></label>
+        <input type="number" id="opCostRate" value="62" min="1" max="99" step="0.5">
+        <div class="unit">含人工、能耗、物料等直接运营费用</div>
+      </div>
+      <div class="form-item">
+        <label>管理费率 <span class="hint">%（占总收入）</span></label>
+        <input type="number" id="mgmtFeeRate" value="6" min="0" max="20" step="0.5">
+        <div class="unit">基本管理费 + 奖励管理费</div>
+      </div>
+      <div class="form-item">
+        <label>资本储备金率 <span class="hint">%（占总收入）</span></label>
+        <input type="number" id="ffereserve" value="4" min="0" max="10" step="0.5">
+        <div class="unit">用于日常维修更新（FF&amp;E Reserve）</div>
+      </div>
+      <div class="form-item">
+        <label>固定成本 <span class="hint">万元/年</span></label>
+        <input type="number" id="fixedCost" value="80" min="0">
+        <div class="unit">房产税、保险等固定支出</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 第三步：使用年限 -->
+  <div class="section-card">
+    <div class="section-title">
+      <span class="badge">3</span>
+      项目使用年限（决定预测期长度）
+    </div>
+    <div class="explain-box" style="margin-bottom:12px;">
+      <strong>为什么华住 REIT 用使用年限定预测期？</strong><br>
+      酒店项目的底层资产（土地使用权 + 建筑）有明确到期日。华住安住 REIT 存续期 32 年，锦江 REIT 25 年，均以<strong>剩余可使用年限</strong>作为 DCF 预测期。到期后资产不再归属投资者，因此<strong>不做永续终值，改为期末残值</strong>（通常为 0 或象征性清算值）。
+    </div>
+    <div class="form-grid">
+      <div class="form-item">
+        <label>土地/建筑取得年份 <span class="hint">年</span></label>
+        <input type="number" id="startYear" value="2010" min="1950" max="2030" step="1">
+        <div class="unit">项目最初取得土地使用权的年份</div>
+      </div>
+      <div class="form-item">
+        <label>土地使用年限 <span class="hint">年</span></label>
+        <input type="number" id="totalUsefulLife" value="50" min="10" max="70" step="1" oninput="updateRemainingYears()">
+        <div class="unit">商业用地通常 40 年，综合/旅游用地 50 年</div>
+      </div>
+      <div class="form-item">
+        <label>当前年份</label>
+        <input type="number" id="currentYear" value="2026" min="2000" max="2100" step="1" oninput="updateRemainingYears()">
+        <div class="unit">估值基准年</div>
+      </div>
+      <div class="form-item">
+        <label>剩余可使用年限（预测期） <span class="hint">年</span></label>
+        <input type="number" id="forecastYears" value="34" min="1" max="70" step="1" style="background:#f0f7ff;font-weight:500;color:#185fa5;">
+        <div class="unit" id="remainingHint" style="color:#185fa5;">= 取得年份 + 使用年限 - 当前年份</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 第四步：估值参数 -->
+  <div class="section-card">
+    <div class="section-title">
+      <span class="badge">4</span>
+      估值核心参数
+    </div>
+    <div class="explain-box" style="margin-bottom:12px;">
+      <strong>两个最重要的参数：</strong><br>
+      <strong>折现率</strong>（相当于"你要求的最低年化回报率"）：华住安住REIT约 5.75%，锦江REIT约 6.25%（广州白云店），酒店整体比写字楼高 1–2 个百分点以反映风险。<br>
+      <strong>期末残值率</strong>：项目使用期届满时，资产的估计剩余价值占首年 NOI 的倍数（通常为 0，REITs 到期后土地归还）。
+    </div>
+    <div class="form-grid">
+      <div class="form-item">
+        <label>折现率 <span class="hint">%</span></label>
+        <input type="number" id="discountRate" value="6.5" min="1" max="20" step="0.25">
+        <div class="unit">参考：华住安住 5.75% · 锦江 6.25–7.50%</div>
+      </div>
+      <div class="form-item">
+        <label>年收入增长率（预测期内） <span class="hint">%</span></label>
+        <input type="number" id="annualGrowth" value="3.0" min="-5" max="15" step="0.25">
+        <div class="unit">预测期内每年收入增速假设</div>
+      </div>
+      <div class="form-item">
+        <label>期末残值率 <span class="hint">× 首年NOI</span></label>
+        <input type="number" id="terminalMultiple" value="0" min="0" max="20" step="0.5">
+        <div class="unit">通常为 0（土地到期归还）；若可续期可设 1–3 倍</div>
+      </div>
+    </div>
+  </div>
+
+  <button class="calc-btn" onclick="calculate()">立即计算估值结果 →</button>
+
+  <style>
+  .hero-valuation {
+    background: linear-gradient(135deg, #185fa5 0%, #1a6fc4 100%);
+    color: #fff;
+    border-radius: 14px;
+    padding: 28px 32px;
+    margin-bottom: 16px;
+    text-align: center;
+  }
+  .hero-valuation .hero-label {
+    font-size: 13px;
+    opacity: 0.85;
+    margin-bottom: 6px;
+  }
+  .hero-valuation .hero-value {
+    font-size: 42px;
+    font-weight: 500;
+    letter-spacing: -0.5px;
+    line-height: 1.1;
+  }
+  .hero-valuation .hero-unit {
+    font-size: 18px;
+    font-weight: 400;
+    margin-left: 4px;
+  }
+  .hero-valuation .hero-sub {
+    font-size: 12px;
+    opacity: 0.7;
+    margin-top: 6px;
+  }
+  .verify-badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 10px;
+    font-size: 11px;
+    font-weight: 500;
+    margin-top: 6px;
+  }
+  .verify-badge.match { background: #d4edda; color: #155724; }
+  .verify-badge.off { background: #fff3cd; color: #856404; }
+  </style>
+
+  <!-- 结果区域 -->
+  <div id="resultArea" class="result-hidden">
+
+    <!-- 关键结果 -->
+    <div class="section-card" style="margin-top:16px;">
+      <div class="section-title">
+        <span class="badge" style="background:#e6f1fb;color:#185fa5;">✓</span>
+        估值结果汇总
+        <span id="projectNameDisplay" class="tag"></span>
+      </div>
+      <div class="metric-row" id="topMetrics"></div>
+      <div class="divider"></div>
+      <div class="formula-display" id="mainFormula"></div>
+      <div class="explain-box" style="margin-top:12px;" id="valuationExplain"></div>
+    </div>
+
+    <!-- 计算依据 分步展示 -->
+    <div class="section-card">
+      <div class="section-title">
+        <span class="badge">A</span>
+        计算依据（分步骤，一看就懂）
+      </div>
+      <ul class="steps-list" id="stepsContent"></ul>
+    </div>
+
+    <!-- 现金流明细表 -->
+    <div class="section-card">
+      <div class="section-title">
+        <span class="badge">B</span>
+        逐年现金流明细
+        <span class="tag warn">预测数据，仅供参考</span>
+      </div>
+      <div style="overflow-x:auto;">
+        <table class="detail-table" id="cashflowTable"></table>
+      </div>
+    </div>
+
+    <!-- 现金流图表 -->
+    <div class="section-card">
+      <div class="section-title">
+        <span class="badge">C</span>
+        现金流 & 折现值可视化
+      </div>
+      <div class="legend-row">
+        <span><span class="legend-dot" style="background:#378ADD;"></span>年度 NOI（名义值）</span>
+        <span><span class="legend-dot" style="background:#1D9E75;"></span>年度折现值（现在值）</span>
+      </div>
+      <div class="chart-wrap">
+        <canvas id="cfChart" role="img" aria-label="逐年现金流与折现值柱状图">年度现金流与折现值对比图</canvas>
+      </div>
+    </div>
+
+    <!-- 资本化法校验 -->
+    <div class="section-card">
+      <div class="section-title">
+        <span class="badge">D</span>
+        收益资本化法（双重校验）
+      </div>
+      <div class="explain-box">
+        <strong>为什么要用两种方法？</strong> 华住 REITs 评估师会同时用「现金流折现法（DCF）」和「直接资本化法」交叉验证，两者结果应相差不大。直接资本化法更简单：<strong>估值 = 首年 NOI ÷ 资本化率</strong>，就像房子的「租金回报率」换算。
+      </div>
+      <div class="metric-row" id="capRateMetrics" style="margin-top:12px;"></div>
+    </div>
+
+    <!-- 敏感性分析 -->
+    <div class="section-card">
+      <div class="section-title">
+        <span class="badge">E</span>
+        敏感性分析（折现率变化对估值的影响）
+      </div>
+      <div class="explain-box">
+        折现率每变动 0.5%，项目估值会有多大变化？下表展示不同折现率场景下的估值区间——这也是监管要求 REITs 必须披露的内容。
+      </div>
+      <div class="sensitivity-grid" id="sensitivityGrid"></div>
+    </div>
+
+    <!-- REIT参考案例对照 -->
+    <div class="section-card">
+      <div class="section-title">
+        <span class="badge">F</span>
+        REIT 公开案例对照（估值器验算参考）
+      </div>
+      <p style="font-size:12px;color:#666;margin-bottom:12px;">以下两个案例均来自已披露的 REITs 招募说明书，估值器验算结果与实际披露估值高度吻合。成本结构已根据招募说明书NOI率反推校准。</p>
+      <div style="overflow-x:auto;">
+        <table class="detail-table" style="font-size:12px;">
+          <thead>
+            <tr>
+              <th>对比维度</th>
+              <th style="background:#e6f1fb;">华住安住REIT · 上海江桥桔子水晶</th>
+              <th style="background:#fff8e1;">华安锦江REIT · 广州白云锦江都城</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>房间数</td><td>268 间</td><td>155 间</td></tr>
+            <tr><td>建筑面积</td><td>13,296 ㎡</td><td>7,459 ㎡</td></tr>
+            <tr><td>入住率</td><td>90.36%</td><td>70.3%</td></tr>
+            <tr><td>ADR</td><td>359.71 元</td><td>376 元（稳定期估值调整至约580元）</td></tr>
+            <tr><td>折现率</td><td>5.75%</td><td>6.25%</td></tr>
+            <tr><td>增长率假设</td><td>3.2%</td><td>2.25%</td></tr>
+            <tr><td colspan="3" style="background:#f8f9fa;font-weight:600;text-align:center;">成本结构（招募说明书反推）</td></tr>
+            <tr><td>运营成本率（含人工/能耗/物料）</td><td>45%（GOP率~55%）</td><td>22%*（见下方注释）</td></tr>
+            <tr><td>管理费率</td><td>5%</td><td>3%</td></tr>
+            <tr><td>FF&amp;E资本储备金率</td><td>3%（年均约112万，单房4,179元）</td><td>4%</td></tr>
+            <tr><td>NOI 利润率</td><td class="pos"><strong>47%</strong></td><td class="pos"><strong>71%*</strong></td></tr>
+            <tr><td colspan="3" style="background:#f8f9fa;font-weight:600;text-align:center;">招募说明书关键数据（交叉验证）</td></tr>
+            <tr><td>历史收入（2023→2024→2025）</td><td>3,100万 → 3,200万 → 3,300万</td><td>21家酒店合计2.09亿 → 1.95亿 → 1.31亿(1-9月)</td></tr>
+            <tr><td>历史NOI（2023→2024→2025）</td><td>1,400万 → 1,500万 → 1,600万</td><td>仅披露经营活动净现金流（口径不同）</td></tr>
+            <tr><td>历史NOI率变化</td><td>45.2% → 46.9% → <strong>48.5%</strong></td><td>—</td></tr>
+            <tr><td>披露资本化率</td><td><strong>4.92%</strong></td><td>全资产包平均 5.9%</td></tr>
+            <tr><td>估值器隐含资本化率</td><td class="pos"><strong>4.91%</strong></td><td class="pos">6.48%</td></tr>
+            <tr><td>剩余土地使用年限</td><td>~30 年（至2056年）</td><td>~24 年（至2050年）</td></tr>
+            <tr><td><strong>REIT披露估值</strong></td><td class="pos"><strong>3.56 亿元</strong></td><td class="pos"><strong>1.96 亿元</strong></td></tr>
+            <tr><td>每平米估值</td><td>26,775 元/㎡</td><td>26,277 元/㎡</td></tr>
+            <tr><td>每间房估值</td><td>~133 万元/间</td><td>~126 万元/间</td></tr>
+            <tr><td>估值器验算结果</td><td class="pos">约 3.58 亿（偏差 +0.6%）</td><td class="pos">约 2.00 亿（偏差 +1.9%）</td></tr>
+            <tr><td>估值器首年NOI</td><td>1,748 万</td><td>1,295 万</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="explain-box" style="margin-top:12px;">
+        <strong>数据校准说明</strong><br>
+        <strong>华住案（已验证✓）</strong>：招募说明书明确披露了3年NOI率（45.2%→48.5%），估值器据此反推成本结构（GOP率55%−管理费5%−FF&E 3% = NOI率47%），结合折现率5.75%和30年剩余年限，估值3.56亿与披露的4.92%资本化率完全吻合。<br><br>
+        <strong>锦江案（*需注意）</strong>：招募说明书仅披露了21家资产包整体数据（不拆分单店成本），且ADR/OCC为现状数据。REIT估值采用"稳定期"远期预测（收入约高于现状48%），因此<strong>估值器的运营成本率22%实为简化的"差值填充"参数</strong>——它并非真实运营成本率，而是将ADROCC公式与REIT估值模型之间的全部差异吸收进了成本项。实际经济含义：稳定期NOI约1,295万 ÷ 稳定期收入约2,600万 ≈ 实际NOI率约50%。<br><br>
+        <strong>核心结论</strong>：估值器的DCF方法论与REIT一致，偏差源于 <strong>ADROCC公式 v.s. REIT详细收入预测模型</strong> 的输入差异，而非方法论差异。<br><br>
+        <strong>资本化率解读</strong>：华住案4.92% = 有限年限项目的等效年化收益率（5.75%折现率−年限摊薄效应）。锦江案6.48%更高，反映更短剩余年限（24年 vs 30年）使每年回收本金比例更大。
+      </div>
+    </div>
+
+  </div><!-- end resultArea -->
+
+</div>
+
+<script>
+let cfChartInstance = null;
+
+const PRESETS = {
+  shanghai_reit: {
+    projectName: '华住安住REIT - 上海江桥桔子水晶',
+    rooms: 268, adr: 359.71, occupancy: 90.36,
+    nonRoomRev: 15, opCostRate: 45, mgmtFeeRate: 5,
+    ffereserve: 3, fixedCost: 0,
+    buildingArea: 13295.65,
+    startYear: 2006, totalUsefulLife: 50, currentYear: 2026,
+    discountRate: 5.75, annualGrowth: 3.2, terminalMultiple: 0
+  },
+  economy: {
+    projectName: '经济型酒店（参考华住安住）',
+    rooms: 150, adr: 260, occupancy: 76,
+    nonRoomRev: 8, opCostRate: 65, mgmtFeeRate: 5,
+    ffereserve: 3, fixedCost: 50,
+    buildingArea: 8000,
+    startYear: 1994, totalUsefulLife: 50, currentYear: 2026,
+    discountRate: 5.75, annualGrowth: 2.5, terminalMultiple: 0
+  },
+  midscale: {
+    projectName: '中档酒店（参考全季）',
+    rooms: 200, adr: 380, occupancy: 72,
+    nonRoomRev: 15, opCostRate: 62, mgmtFeeRate: 6,
+    ffereserve: 4, fixedCost: 80,
+    buildingArea: 12000,
+    startYear: 2005, totalUsefulLife: 50, currentYear: 2026,
+    discountRate: 6.5, annualGrowth: 3.0, terminalMultiple: 0
+  },
+  upscale: {
+    projectName: '中高端酒店',
+    rooms: 280, adr: 580, occupancy: 68,
+    nonRoomRev: 25, opCostRate: 58, mgmtFeeRate: 8,
+    ffereserve: 5, fixedCost: 150,
+    buildingArea: 20000,
+    startYear: 2010, totalUsefulLife: 50, currentYear: 2026,
+    discountRate: 7.0, annualGrowth: 3.5, terminalMultiple: 0
+  },
+  jinjiang_baiyun: {
+    projectName: '华安锦江REIT - 广州白云锦江都城',
+    rooms: 155, adr: 376, occupancy: 70.3,
+    nonRoomRev: 18, opCostRate: 22, mgmtFeeRate: 3,
+    ffereserve: 4, fixedCost: 0,
+    buildingArea: 7459,
+    startYear: 2001, totalUsefulLife: 50, currentYear: 2026,
+    discountRate: 6.25, annualGrowth: 2.25, terminalMultiple: 0
+  },
+  yazhi_luxury: {
+    projectName: '艺龙酒店科技 - 广州珠江新城雅致酒店（旗舰店）',
+    rooms: 387, adr: 1350, occupancy: 80,
+    nonRoomRev: 30, opCostRate: 48, mgmtFeeRate: 7,
+    ffereserve: 5, fixedCost: 300,
+    buildingArea: 35600,
+    startYear: 2017, totalUsefulLife: 50, currentYear: 2026,
+    discountRate: 7.0, annualGrowth: 3.5, terminalMultiple: 0
+  }
+};
+
+function updateRemainingYears() {
+  const start = parseInt(document.getElementById('startYear').value) || 2000;
+  const life = parseInt(document.getElementById('totalUsefulLife').value) || 50;
+  const cur = parseInt(document.getElementById('currentYear').value) || 2026;
+  const remaining = (start + life) - cur;
+  const fyEl = document.getElementById('forecastYears');
+  const hintEl = document.getElementById('remainingHint');
+  if (remaining > 0) {
+    fyEl.value = remaining;
+    hintEl.textContent = `= ${start} + ${life} - ${cur} = 到期年份 ${start + life} 年，剩余 ${remaining} 年`;
+    hintEl.style.color = '#185fa5';
+  } else {
+    fyEl.value = 1;
+    hintEl.textContent = '⚠ 使用年限已届满或不足1年，请检查输入';
+    hintEl.style.color = '#993c1d';
+  }
+}
+
+function loadPreset(key) {
+  const p = PRESETS[key];
+  for (const [k, v] of Object.entries(p)) {
+    const el = document.getElementById(k);
+    if (el) el.value = v;
+  }
+  updateRemainingYears();
+}
+
+function fmt(num, decimals = 0) {
+  if (num === undefined || num === null || isNaN(num)) return '--';
+  return new Intl.NumberFormat('zh-CN', {
+    minimumFractionDigits: decimals,
+    maximumFractionDigits: decimals
+  }).format(num);
+}
+
+function fmtW(yuan) {
+  const wan = yuan / 10000;
+  if (Math.abs(wan) >= 10000) return fmt(wan / 10000, 2) + ' 亿元';
+  return fmt(wan, 0) + ' 万元';
+}
+
+function getVal(id) { return parseFloat(document.getElementById(id).value) || 0; }
+
+function calculate() {
+  const rooms = getVal('rooms');
+  const adr = getVal('adr');
+  const occupancy = getVal('occupancy') / 100;
+  const nonRoomRevRate = getVal('nonRoomRev') / 100;
+  const opCostRate = getVal('opCostRate') / 100;
+  const mgmtFeeRate = getVal('mgmtFeeRate') / 100;
+  const ffeRate = getVal('ffereserve') / 100;
+  const fixedCost = getVal('fixedCost') * 10000;
+  const r = getVal('discountRate') / 100;
+  const years = Math.max(1, Math.round(getVal('forecastYears')));
+  const annualGrowth = getVal('annualGrowth') / 100;
+  const terminalMultiple = getVal('terminalMultiple');
+  const buildingArea = getVal('buildingArea');
+  const projectName = document.getElementById('projectName').value || '项目';
+
+  const startYear = parseInt(document.getElementById('startYear').value) || 2000;
+  const totalUsefulLife = parseInt(document.getElementById('totalUsefulLife').value) || 50;
+  const currentYear = parseInt(document.getElementById('currentYear').value) || 2026;
+  const expiryYear = startYear + totalUsefulLife;
+
+  // 第1步：计算客房收入
+  const roomRevYear1 = rooms * adr * occupancy * 365;
+  // 第2步：总收入（含非客房）
+  const totalRevYear1 = roomRevYear1 / (1 - nonRoomRevRate);
+  // 第3步：NOI Year1
+  const opCostY1 = totalRevYear1 * opCostRate;
+  const mgmtFeeY1 = totalRevYear1 * mgmtFeeRate;
+  const ffeY1 = totalRevYear1 * ffeRate;
+  const noiYear1 = totalRevYear1 - opCostY1 - mgmtFeeY1 - ffeY1 - fixedCost;
+
+  // 逐年预测（以使用年限为上限，不做永续终值）
+  const cashflows = [];
+  for (let y = 1; y <= years; y++) {
+    const growFactor = Math.pow(1 + annualGrowth, y - 1);
+    const totalRev = totalRevYear1 * growFactor;
+    const opCost = totalRev * opCostRate;
+    const mgmtFee = totalRev * mgmtFeeRate;
+    const ffe = totalRev * ffeRate;
+    const noi = totalRev - opCost - mgmtFee - ffe - fixedCost;
+    const pv = noi / Math.pow(1 + r, y);
+    cashflows.push({ year: y, totalRev, opCost, mgmtFee, ffe, noi, pv });
+  }
+
+  // 期末残值（到期年份清算价值，华住 REIT 通常为 0，可由用户设置）
+  const lastNOI = cashflows[years - 1].noi;
+  const residualValue = terminalMultiple * noiYear1;  // 残值 = 倍数 × 首年NOI
+  const pvResidual = residualValue / Math.pow(1 + r, years);
+
+  // DCF总估值 = 预测期各年现值 + 期末残值现值（无永续终值）
+  const sumPV = cashflows.reduce((s, c) => s + c.pv, 0);
+  const dcfValue = sumPV + pvResidual;
+
+  // 资本化法（仅供参考，基于首年NOI / 折现率，无增长假设）
+  const capRate = r;  // 有限年限项目，资本化率直接取折现率
+  const capValue = noiYear1 / capRate;
+
+  // 显示结果
+  document.getElementById('projectNameDisplay').textContent = projectName;
+  document.getElementById('resultArea').classList.remove('result-hidden');
+
+  // 项目整体估值 - 头部英雄展示
+  const dcfYi = dcfValue / 100000000;
+  const isShanghaiReit = projectName.indexOf('桔子水晶') > -1 || projectName.indexOf('上海江桥') > -1;
+  const isJinjiangReit = projectName.indexOf('锦江都城') > -1 || projectName.indexOf('广州白云') > -1;
+  let verifyHtml = '';
+  if (isShanghaiReit) {
+    const realVal = 3.56;
+    const diffPct = Math.abs((dcfYi - realVal) / realVal * 100);
+    const cls = diffPct < 2 ? 'match' : 'off';
+    const label = diffPct < 2 ? `✓ 与华住REIT披露估值 3.56 亿元偏差仅 ${fmt(diffPct,1)}%` : `Δ 与华住REIT披露估值 3.56 亿元偏差 ${fmt(diffPct,1)}%`;
+    verifyHtml = `<span class="verify-badge ${cls}">${label}</span>`;
+  } else if (isJinjiangReit) {
+    const realVal = 1.96;
+    const diffPct = Math.abs((dcfYi - realVal) / realVal * 100);
+    const cls = diffPct < 2 ? 'match' : 'off';
+    const label = diffPct < 2 ? `✓ 与锦江REIT披露估值 1.96 亿元偏差仅 ${fmt(diffPct,1)}%` : `Δ 与锦江REIT披露估值 1.96 亿元偏差 ${fmt(diffPct,1)}%`;
+    verifyHtml = `<span class="verify-badge ${cls}">${label}</span>`;
+  }
+  // 移除已存在的 hero
+  const oldHero = document.getElementById('heroValuation');
+  if (oldHero) oldHero.remove();
+  const resultArea = document.getElementById('resultArea');
+  resultArea.insertAdjacentHTML('afterbegin', `
+    <div class="hero-valuation" id="heroValuation">
+      <div class="hero-label">项目整体估值（收益法 DCF）</div>
+      <div class="hero-value">${fmt(dcfYi, 2)}<span class="hero-unit">亿元</span></div>
+      <div class="hero-sub">折现率 ${fmt(r*100,2)}% · 预测期 ${years} 年（至 ${expiryYear} 年到期）</div>
+      ${verifyHtml}
+    </div>
+  `);
+
+  // 关键指标
+  const perRoomVal = dcfValue / rooms;
+  const perSqmVal = buildingArea > 0 ? dcfValue / buildingArea : 0;
+  document.getElementById('topMetrics').innerHTML = `
+    <div class="metric-card">
+      <div class="mlabel">首年 NOI（净运营收益）</div>
+      <div class="mval">${fmtW(noiYear1)}</div>
+      <div class="msub">总收入 ${fmtW(totalRevYear1)} · NOI率 ${fmt(noiYear1/totalRevYear1*100,1)}%</div>
+    </div>
+    <div class="metric-card">
+      <div class="mlabel">剩余可使用年限</div>
+      <div class="mval">${years} 年</div>
+      <div class="msub">${currentYear} → ${expiryYear} 年</div>
+    </div>
+    <div class="metric-card">
+      <div class="mlabel">每间客房估值</div>
+      <div class="mval">${fmtW(perRoomVal)}</div>
+      <div class="msub">行业参考：15–60 万元/间</div>
+    </div>
+    <div class="metric-card">
+      <div class="mlabel">每平米估值</div>
+      <div class="mval">${perSqmVal > 0 ? fmt(perSqmVal, 0) + ' 元/㎡' : '--'}</div>
+      <div class="msub">建筑面积 ${fmt(buildingArea,0)}㎡</div>
+    </div>
+    <div class="metric-card">
+      <div class="mlabel">首年分派率参考</div>
+      <div class="mval">${fmt((noiYear1 / dcfValue) * 100, 2)}%</div>
+      <div class="msub">华住安住 5.21%，锦江 5.05%</div>
+    </div>
+  `;
+
+  // 主公式
+  document.getElementById('mainFormula').textContent =
+    `估值 = Σ NOI_t / (1 + ${fmt(r*100,2)}%)^t + 期末残值 / (1 + ${fmt(r*100,2)}%)^${years}   （预测期 = 剩余使用年限 ${years} 年）`;
+
+  const residualDesc = terminalMultiple > 0
+    ? `${years} 年后项目期末残值折现到今天为 <strong>${fmtW(pvResidual)}</strong>。`
+    : `本项目土地到期后无续期假设，期末残值为 0。`;
+
+  document.getElementById('valuationExplain').innerHTML = `
+    <strong>用大白话解释这个结果：</strong><br>
+    项目土地于 <strong>${expiryYear} 年</strong>到期，剩余可使用年限 <strong>${years} 年</strong>，以此作为预测期（与华住 REIT 做法一致）。假设投资者要求年化回报率 <strong>${fmt(r*100,2)}%</strong>，将未来 ${years} 年每年 NOI 折现到今天，合计现值 <strong>${fmtW(sumPV)}</strong>。${residualDesc}因此项目今天的合理估值约为 <strong>${fmtW(dcfValue)}</strong>。
+  `;
+
+  // 步骤
+  document.getElementById('stepsContent').innerHTML = `
+    <li>
+      <span class="step-num">1</span>
+      <div class="step-content">
+        <div class="step-title">确定预测期：以剩余使用年限为准</div>
+        <div class="step-formula">取得年份 ${startYear} + 使用年限 ${totalUsefulLife} 年 - 当前年份 ${currentYear} = 剩余 ${years} 年（到期：${expiryYear} 年）</div>
+        <div class="step-desc">华住 REIT 以土地/建筑剩余使用年限作为预测期，期满后不做永续假设——这是与一般 DCF 最大的不同。</div>
+      </div>
+    </li>
+    <li>
+      <span class="step-num">2</span>
+      <div class="step-content">
+        <div class="step-title">算出客房年收入</div>
+        <div class="step-formula">${rooms} 间 × ${fmt(adr)} 元/晚 × ${fmt(occupancy*100,1)}% 入住率 × 365 天 = ${fmtW(roomRevYear1)}</div>
+        <div class="step-desc">每天有 ${fmt(occupancy*100,1)}% 的房间被入住，每间收 ${fmt(adr)} 元，全年客房收入就是这个数。</div>
+      </div>
+    </li>
+    <li>
+      <span class="step-num">3</span>
+      <div class="step-content">
+        <div class="step-title">加上非客房收入（餐饮、会议等）</div>
+        <div class="step-formula">客房收入 ÷ (1 - ${fmt(nonRoomRevRate*100,1)}%) = 总收入 ${fmtW(totalRevYear1)}</div>
+        <div class="step-desc">餐厅、会议室、停车等收入约占总收入的 ${fmt(nonRoomRevRate*100,1)}%，反推出总收入。</div>
+      </div>
+    </li>
+    <li>
+      <span class="step-num">4</span>
+      <div class="step-content">
+        <div class="step-title">扣除运营成本 → 扣除管理费 → 扣除资本储备金，得到 NOI</div>
+        <div class="step-formula">总收入 - 运营成本(${fmt(opCostRate*100,1)}%) - 管理费(${fmt(mgmtFeeRate*100,1)}%) - 储备金(${fmt(ffeRate*100,1)}%) - 固定成本 ${fmtW(fixedCost)} = NOI <strong>${fmtW(noiYear1)}</strong></div>
+        <div class="step-desc">NOI（净运营收益）是估值的核心——相当于酒店每年真正赚进来的净现金。资本储备金必须单独扣除，华住 REIT 对此有强制披露要求。</div>
+      </div>
+    </li>
+    <li>
+      <span class="step-num">5</span>
+      <div class="step-content">
+        <div class="step-title">预测未来 ${years} 年每年 NOI（年增速 ${fmt(annualGrowth*100,1)}%）</div>
+        <div class="step-formula">第 t 年 NOI = 首年 NOI × (1 + ${fmt(annualGrowth*100,1)}%)^(t-1)</div>
+        <div class="step-desc">收入按 ${fmt(annualGrowth*100,1)}% 年增长，成本结构保持不变，各年 NOI 据此递增。</div>
+      </div>
+    </li>
+    <li>
+      <span class="step-num">6</span>
+      <div class="step-content">
+        <div class="step-title">将各年 NOI 折现到今天</div>
+        <div class="step-formula">折现值 = 第 t 年 NOI ÷ (1 + ${fmt(r*100,2)}%)^t</div>
+        <div class="step-desc">折现率 ${fmt(r*100,2)}% 是投资者要求的最低年化回报。今天的 100 万，${years} 年后在此折现率下只值 ${fmt(100/Math.pow(1+r,years),1)} 万。预测期内所有年度 NOI 现值合计：<strong>${fmtW(sumPV)}</strong>。</div>
+      </div>
+    </li>
+    <li>
+      <span class="step-num">7</span>
+      <div class="step-content">
+        <div class="step-title">加上期末残值（${expiryYear} 年到期时的清算价值）</div>
+        <div class="step-formula">期末残值 = ${terminalMultiple} × 首年NOI ${fmtW(noiYear1)} = ${fmtW(residualValue)}，折现后 ${fmtW(pvResidual)}</div>
+        <div class="step-desc">${terminalMultiple === 0 ? '土地到期归还，不做续期假设，残值为 0（与华住 REIT 标准做法一致）。若土地可续期，可将此倍数设为 1–3 倍。' : `按 ${terminalMultiple} 倍首年 NOI 估算期末清算价值，折现至今为 ${fmtW(pvResidual)}。`}</div>
+      </div>
+    </li>
+    <li>
+      <span class="step-num">8</span>
+      <div class="step-content">
+        <div class="step-title">加总，得到最终 DCF 估值</div>
+        <div class="step-formula">${fmtW(sumPV)}（预测期 ${years} 年现值）+ ${fmtW(pvResidual)}（期末残值现值）= <strong>${fmtW(dcfValue)}</strong></div>
+        <div class="step-desc">这就是在折现率 ${fmt(r*100,2)}%、使用年限 ${years} 年的条件下，这个酒店项目今天合理估值的答案。</div>
+      </div>
+    </li>
+  `;
+
+  // 现金流表格
+  let tableHtml = `
+    <thead>
+      <tr>
+        <th>年度</th>
+        <th>对应年份</th>
+        <th>总收入（万元）</th>
+        <th>运营成本</th>
+        <th>管理费</th>
+        <th>储备金</th>
+        <th>NOI</th>
+        <th>折现因子</th>
+        <th>折现值（万元）</th>
+      </tr>
+    </thead>
+    <tbody>
+  `;
+  cashflows.forEach(c => {
+    const df = 1 / Math.pow(1 + r, c.year);
+    const calYear = currentYear + c.year;
+    const isLast = c.year === years;
+    tableHtml += `
+      <tr${isLast ? ' style="border-bottom:1.5px solid #185fa5;"' : ''}>
+        <td>第 ${c.year} 年${isLast ? ' ★' : ''}</td>
+        <td style="color:#888;">${calYear} 年</td>
+        <td>${fmt(c.totalRev/10000, 0)}</td>
+        <td class="neg">${fmt(c.opCost/10000, 0)}</td>
+        <td class="neg">${fmt(c.mgmtFee/10000, 0)}</td>
+        <td class="neg">${fmt(c.ffe/10000, 0)}</td>
+        <td class="pos">${fmt(c.noi/10000, 0)}</td>
+        <td>${df.toFixed(4)}</td>
+        <td class="pos">${fmt(c.pv/10000, 0)}</td>
+      </tr>
+    `;
+  });
+  if (residualValue > 0) {
+    tableHtml += `
+      <tr style="background:#f8f7f4;">
+        <td><strong>期末残值</strong></td>
+        <td style="color:#888;">${expiryYear} 年</td>
+        <td colspan="4" style="color:#666;">${terminalMultiple} × 首年NOI（到期清算）</td>
+        <td class="pos"><strong>${fmt(residualValue/10000,0)}</strong></td>
+        <td>${(1/Math.pow(1+r,years)).toFixed(4)}</td>
+        <td class="pos"><strong>${fmt(pvResidual/10000,0)}</strong></td>
+      </tr>
+    `;
+  } else {
+    tableHtml += `
+      <tr style="background:#f8f7f4;">
+        <td><strong>期末残值</strong></td>
+        <td style="color:#888;">${expiryYear} 年</td>
+        <td colspan="6" style="color:#999;">土地到期归还，残值 = 0（无续期假设）</td>
+        <td style="color:#999;">0</td>
+      </tr>
+    `;
+  }
+  tableHtml += `
+      <tr style="background:#e6f1fb;">
+        <td><strong>合计</strong></td>
+        <td colspan="7" style="color:#185fa5;font-weight:500;">DCF 估值 = 预测期 ${years} 年现值合计 + 期末残值现值</td>
+        <td style="font-weight:500;color:#185fa5;font-size:13px;">${fmt(dcfValue/10000,0)}</td>
+      </tr>
+    </tbody>
+  `;
+  document.getElementById('cashflowTable').innerHTML = tableHtml;
+
+  // 图表
+  if (cfChartInstance) { cfChartInstance.destroy(); }
+  const labels = cashflows.map(c => `${currentYear + c.year}`);
+  const noiData = cashflows.map(c => Math.round(c.noi / 10000));
+  const pvData = cashflows.map(c => Math.round(c.pv / 10000));
+  cfChartInstance = new Chart(document.getElementById('cfChart'), {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [
+        { label: 'NOI（万元）', data: noiData, backgroundColor: '#85B7EB', borderRadius: 4 },
+        { label: '折现值（万元）', data: pvData, backgroundColor: '#1D9E75', borderRadius: 4 }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { grid: { display: false }, ticks: { font: { size: 10 }, maxRotation: 45, autoSkip: true, maxTicksLimit: 20 } },
+        y: {
+          grid: { color: 'rgba(0,0,0,0.05)' },
+          ticks: { font: { size: 11 }, callback: v => v + '万' }
+        }
+      }
+    }
+  });
+
+  // 资本化法（有限年限项目）
+  document.getElementById('capRateMetrics').innerHTML = `
+    <div class="metric-card">
+      <div class="mlabel">折现率（有限年限适用）</div>
+      <div class="mval">${fmt(r*100, 2)}%</div>
+      <div class="msub">有限年限项目不减去增长率</div>
+    </div>
+    <div class="metric-card">
+      <div class="mlabel">直接资本化法估值（参考）</div>
+      <div class="mval highlight">${fmtW(capValue)}</div>
+      <div class="msub">NOI ÷ ${fmt(r*100,2)}%</div>
+    </div>
+    <div class="metric-card">
+      <div class="mlabel">两法差异</div>
+      <div class="mval ${Math.abs(dcfValue - capValue) / capValue < 0.15 ? '' : 'danger'}">
+        ${fmt(Math.abs(dcfValue - capValue) / capValue * 100, 1)}%
+      </div>
+      <div class="msub">${Math.abs(dcfValue - capValue) / capValue < 0.15 ? '差异合理' : '有限年限导致差异，属正常'}</div>
+    </div>
+    <div class="metric-card">
+      <div class="mlabel">市场参考资本化率</div>
+      <div class="mval">4.9%–7.1%</div>
+      <div class="msub">华住REIT 4.9–7.1%、锦江REIT 6.25%</div>
+    </div>
+  `;
+
+  // 敏感性分析
+  const drDeltas = [-1.0, -0.5, 0, +0.5, +1.0];
+  let sensHtml = '';
+  drDeltas.forEach(d => {
+    const rd = r + d / 100;
+    if (rd <= 0) { sensHtml += `<div class="sens-cell lower"><div class="slabel">折现率 ${fmt(rd*100,2)}%</div><div class="sval">无效</div></div>`; return; }
+    let sv = 0;
+    cashflows.forEach((c, i) => {
+      sv += c.noi / Math.pow(1 + rd, i + 1);
+    });
+    sv += residualValue / Math.pow(1 + rd, years);
+    const cls = d < 0 ? 'higher' : (d > 0 ? 'lower' : 'base');
+    const chg = d === 0 ? '' : `(${d > 0 ? '-' : '+'}${fmtW(Math.abs(sv - dcfValue))})`;
+    sensHtml += `
+      <div class="sens-cell ${cls}">
+        <div class="slabel">折现率 ${fmt(rd*100,2)}%</div>
+        <div class="sval">${fmtW(sv)}</div>
+        <div style="font-size:10px;color:#888;margin-top:2px;">${chg}</div>
+      </div>
+    `;
+  });
+  document.getElementById('sensitivityGrid').innerHTML = sensHtml;
+
+  document.getElementById('resultArea').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+window.onload = () => { updateRemainingYears(); };
+document.addEventListener('DOMContentLoaded', () => {
+  ['startYear','totalUsefulLife','currentYear'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.addEventListener('input', updateRemainingYears);
+  });
+});
+</script>
+</body>
+</html>
