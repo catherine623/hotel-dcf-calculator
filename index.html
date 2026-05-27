@@ -447,7 +447,7 @@
       </div>
       <div class="form-item">
         <label>土地使用年限 <span class="hint">年</span></label>
-        <input type="number" id="totalUsefulLife" value="50" min="10" max="70" step="1" oninput="updateRemainingYears()">
+        <input type="number" id="totalUsefulLife" value="40" min="10" max="70" step="1" oninput="updateRemainingYears()">
         <div class="unit">商业用地通常 40 年，综合/旅游用地 50 年</div>
       </div>
       <div class="form-item">
@@ -617,9 +617,9 @@
     <div class="section-card">
       <div class="section-title">
         <span class="badge">F</span>
-        REIT 公开案例对照（估值器验算参考）
+        REIT 公开案例对照
       </div>
-      <p style="font-size:12px;color:#666;margin-bottom:12px;">以下两个案例均来自已披露的 REITs 招募说明书，估值器验算结果与实际披露估值高度吻合。成本结构已根据招募说明书NOI率反推校准。</p>
+      <p style="font-size:11px;color:#999;margin-bottom:8px;">📋 = 招募说明书披露值&emsp;🔄 = 估值器反推值</p>
       <div style="overflow-x:auto;">
         <table class="detail-table" style="font-size:12px;">
           <thead>
@@ -636,32 +636,33 @@
             <tr><td>开业年份</td><td>—</td><td>—</td><td>2005 年</td></tr>
             <tr><td>入住率</td><td>90.36%</td><td>70.3%</td><td>62%</td></tr>
             <tr><td>ADR</td><td>359.71 元</td><td>376 元（稳定期~580元）</td><td>580 元</td></tr>
-            <tr><td>非客房收入（万元/年）</td><td>561 万元（占15%）</td><td>328 万元（占18%）</td><td>7,507 万元（占45%）</td></tr>
+            <tr><td>非客房收入（万元/年）</td><td>📋 561 万元（占15%）</td><td>🔄 328 万元（占18%）</td><td>📋 7,507 万元（占45%）</td></tr>
             <tr><td>土地剩余使用年限</td><td>~30 年（至2056年）</td><td>~24 年（至2050年）</td><td>~18 年（至2044年）</td></tr>
             <tr><td>折现率</td><td>5.75%</td><td>6.25%</td><td>6.25%</td></tr>
             <tr><td>增长率假设</td><td>3.2%</td><td>2.25%</td><td>4.31%</td></tr>
-            <tr><td colspan="6" style="background:#f8f9fa;font-weight:600;text-align:center;">成本结构（招募说明书及公开数据反推）</td></tr>
-            <tr><td>运营成本率</td><td>40.2%</td><td>23.3%*</td><td>51.6%</td></tr>
-            <tr><td>管理费率</td><td>5%</td><td>3%</td><td>5%</td><td>5%</td><td>5%</td></tr>
-            <tr><td>FF&amp;E资本储备金率</td><td>3%</td><td>4%</td><td>4%</td><td>4%</td><td>4%</td></tr>
-            <tr><td>NOI 利润率</td><td class="pos"><strong>44.5%</strong></td><td class="pos"><strong>69.7%*</strong></td><td class="pos"><strong>39.4%</strong></td></tr>
-            <tr><td colspan="6" style="background:#f8f9fa;font-weight:600;text-align:center;">招募说明书关键数据（交叉验证）</td></tr>
-            <tr><td>估值器单项目DCF</td><td class="pos">3.56 亿（±0.0%）</td><td class="pos">1.96 亿（±0.0%）</td><td class="pos"><strong>~9.57 亿</strong></td></tr>
-            <tr><td>估值器三项目DCF合计</td><td>—</td><td>—</td><td class="pos" style="text-align:center;"><strong>（开元仅展示杭州，杭州估值9.57亿）</strong></td></tr>
-            <tr><td>验证结论</td><td class="pos">✓ 偏差&lt;0.1%</td><td class="pos">✓ 偏差&lt;0.1%</td><td class="pos">✓ 偏差&lt;0.1%，DCF方法与官方一致</td></tr>
-            <tr><td>首年NOI</td><td>1,666 万</td><td>1,271 万</td><td>6,577 万</td></tr>
+            <tr><td colspan="4" style="background:#f8f9fa;font-weight:600;text-align:center;">成本结构（招募说明书及公开数据反推）</td></tr>
+            <tr><td>运营成本率</td><td>🔄 40.2%</td><td>🔄 23.3% ⚠</td><td>🔄 51.6%</td></tr>
+            <tr><td>管理费率</td><td>📋 5%</td><td>📋 3%</td><td>📋 5%</td></tr>
+            <tr><td>FF&amp;E资本储备金率</td><td>📋 3%</td><td>📋 4%</td><td>📋 4%</td></tr>
+            <tr><td>NOI 利润率</td><td class="pos"><strong>📋 44.5%</strong></td><td class="pos"><strong>🔄 69.7% ⚠</strong></td><td class="pos"><strong>🔄 39.4%</strong></td></tr>
+            <tr><td colspan="4" style="background:#f8f9fa;font-weight:600;text-align:center;">估值验算（交叉验证）</td></tr>
+            <tr><td>估值器单项目DCF</td><td class="pos">📋 3.56 亿（偏差&lt;0.1%）</td><td class="pos">📋 1.96 亿（偏差&lt;0.1%）</td><td class="pos"><strong>📋 9.57 亿（偏差&lt;0.1%）</strong></td></tr>
+            <tr><td>验证结论</td><td class="pos">✓ 华住年报明确披露DCF=3.56亿</td><td class="pos">✓ 锦江招募书披露资产包估值，单店反推匹配</td><td class="pos">✓ 开元招募书明确披露杭州估值9.57亿</td></tr>
+            <tr><td>首年NOI</td><td>🔄 1,666 万</td><td>🔄 1,271 万</td><td>🔄 6,577 万</td></tr>
             <tr><td>每平米估值</td><td>26,775 元/㎡</td><td>26,277 元/㎡</td><td>7,500 元/㎡</td></tr>
             <tr><td>每间房估值</td><td>~133 万元</td><td>~126 万元</td><td>~137 万元</td></tr>
           </tbody>
         </table>
       </div>
       <div class="explain-box" style="margin-top:12px;">
-        <strong>数据校准说明</strong><br>
-        <strong>华住案（已验证✓）</strong>：招募说明书明确披露了3年NOI率（45.2%→48.5%），估值器据此反推成本结构，通过DCF精确校准得到运营成本率40.2%、单房运营成本153.9¥/间/天（涵盖非房收入），结合折现率5.75%和30年剩余年限，估值3.56亿与披露的4.92%资本化率完全吻合。<br><br>
-        <strong>锦江案（*需注意）</strong>：招募说明书仅披露了21家资产包整体数据（不拆分单店成本），且ADR/OCC为现状数据。REIT估值采用"稳定期"远期预测（收入约高于现状48%），估值器将全部差异吸收进成本项，校准运营成本率23.3%后DCF精确匹配1.96亿。<br><br>
-        <strong>开元案（✅ 已官方数据验证）</strong>：开元REIT于2026年4月30日获上交所受理。杭州开元名都估值9.57亿（折现率6.25%、Cap rate 8.15%）。估值器采用官方披露的剩余年限（~18年）、折现率（6.25%）、增长率（4.31%）参数，通过DCF反推首年NOI并校准成本结构，验算结果与官方估值<strong>完全吻合（偏差&lt;0.1%）</strong>。<br><br>
-        <strong>核心结论</strong>：估值器的DCF方法论与华住/锦江/开元REIT完全一致。三个案例分别精确匹配官方估值——华住上海3.56亿、锦江广州白云1.96亿、开元杭州9.57亿（偏差均&lt;0.1%）。<br><br>
-        <strong>资本化率解读</strong>：华住案4.92% = 有限年限项目的等效年化收益率（5.75%折现率−年限摊薄效应）。锦江案6.48%更高，反映更短剩余年限（24年 vs 30年）使每年回收本金比例更大。
+        <strong>📋 披露值 vs 🔄 反推值 对照说明</strong><br><br>
+        <strong>华住案</strong>：招募说明书披露了完整单店参数（ADR、OCC、非房收入561万、NOI率44.5%、折现率5.75%、30年剩余年限）。估值器通过披露的NOI率<strong>反推</strong>运营成本率40.2%，DCF结果3.56亿与披露值<strong>精确吻合</strong>。运营数据与DCF结果均可在招募说明书中找到一一对应。<br><br>
+        <strong>锦江案 ⚠ 反推不一致原因</strong>：招募说明书<strong>仅披露21家资产包整体数据，不拆分单店成本</strong>；且估值器使用的ADR(376元)/OCC(70.3%)为现状数据，但REIT估值采用"稳定期"远期预测（收入约高于现状48%）。因此：<br>
+        • 非房收入328万、运营成本率23.3%、NOI率69.7%均为<strong>估值器反推差值填充</strong>参数（非披露值）<br>
+        • NOI率69.7%高于实际主要因为：估值器收入基数偏低（现状ADR vs 稳定期远期ADR），成本率被压低以匹配披露DCF目标1.96亿<br>
+        • 本质上，这3个值<strong>不具有独立含义</strong>——它们只是吸收"现状收入 vs 远期收入"系统差异的数学等价量<br><br>
+        <strong>开元案</strong>：招募说明书详细披露了杭州项目参数（ADR、OCC、非房收入7507万、折现率6.25%、增长率4.31%、18年剩余年限、Cap rate 8.15%）。估值器通过DCF<strong>反推</strong>运营成本率51.6%，与官方估值9.57亿<strong>精确吻合</strong>。<br><br>
+        <strong>资本化率解读</strong>：华住案Cap rate 4.92% = 5.75%折现率 − 年限摊薄效应。锦江案6.48%更高，反映更短的剩余年限（24年 vs 30年）。
       </div>
     </div>
 
@@ -719,7 +720,7 @@ const PRESETS = {
     nonRoomRev: 561, perRoomOpCost: 153.9, mgmtFeeRate: 5,
     ffereserve: 3, fixedCost: 270,
     buildingArea: 13295.65,
-    startYear: 2006, totalUsefulLife: 50, currentYear: 2026,
+    startYear: 2016, totalUsefulLife: 40, currentYear: 2026,
     discountRate: 5.75, annualGrowth: 3.2, terminalMultiple: 0
   },
   economy: {
@@ -728,7 +729,7 @@ const PRESETS = {
     nonRoomRev: 120, perRoomOpCost: 100, mgmtFeeRate: 5,
     ffereserve: 3, fixedCost: 50,
     buildingArea: 8000,
-    startYear: 1994, totalUsefulLife: 50, currentYear: 2026,
+    startYear: 1994, totalUsefulLife: 40, currentYear: 2026,
     discountRate: 5.75, annualGrowth: 2.5, terminalMultiple: 0
   },
   midscale: {
@@ -737,7 +738,7 @@ const PRESETS = {
     nonRoomRev: 352, perRoomOpCost: 199.5, mgmtFeeRate: 6,
     ffereserve: 4, fixedCost: 80,
     buildingArea: 12000,
-    startYear: 2005, totalUsefulLife: 50, currentYear: 2026,
+    startYear: 2005, totalUsefulLife: 40, currentYear: 2026,
     discountRate: 6.5, annualGrowth: 3.0, terminalMultiple: 0
   },
   upscale: {
@@ -746,7 +747,7 @@ const PRESETS = {
     nonRoomRev: 1344, perRoomOpCost: 305.1, mgmtFeeRate: 8,
     ffereserve: 5, fixedCost: 150,
     buildingArea: 20000,
-    startYear: 2010, totalUsefulLife: 50, currentYear: 2026,
+    startYear: 2010, totalUsefulLife: 40, currentYear: 2026,
     discountRate: 7.0, annualGrowth: 3.5, terminalMultiple: 0
   },
   jinjiang_baiyun: {
@@ -755,7 +756,7 @@ const PRESETS = {
     nonRoomRev: 328, perRoomOpCost: 75.1, mgmtFeeRate: 3,
     ffereserve: 4, fixedCost: 0,
     buildingArea: 7459,
-    startYear: 2001, totalUsefulLife: 50, currentYear: 2026,
+    startYear: 2011, totalUsefulLife: 40, currentYear: 2026,
     discountRate: 6.25, annualGrowth: 2.25, terminalMultiple: 0
   },
   // === 开元REIT （按招募说明书官方估值校准：杭州9.57亿） ===
@@ -772,7 +773,7 @@ const PRESETS = {
 
 function updateRemainingYears() {
   const start = parseInt(document.getElementById('startYear').value) || 2000;
-  const life = parseInt(document.getElementById('totalUsefulLife').value) || 50;
+  const life = parseInt(document.getElementById('totalUsefulLife').value) || 40;
   const cur = parseInt(document.getElementById('currentYear').value) || 2026;
   const remaining = (start + life) - cur;
   const fyEl = document.getElementById('forecastYears');
@@ -830,7 +831,7 @@ function calculate() {
   const projectName = document.getElementById('projectName').value || '项目';
 
   const startYear = parseInt(document.getElementById('startYear').value) || 2000;
-  const totalUsefulLife = parseInt(document.getElementById('totalUsefulLife').value) || 50;
+  const totalUsefulLife = parseInt(document.getElementById('totalUsefulLife').value) || 40;
   const currentYear = parseInt(document.getElementById('currentYear').value) || 2026;
   const expiryYear = startYear + totalUsefulLife;
 
@@ -940,38 +941,43 @@ function calculate() {
     const diffPct = ((dcfYi - realVal) / realVal * 100);
     hero.insertAdjacentHTML('afterend', `
       <div class="section-card" id="jinjiangDeviationBox" style="border-left:3px solid #e6a817;background:#fffdf5;">
-        <div class="section-title" style="color:#854f0b;">⚠ 锦江REIT成本说明：现状ADR/OCC vs 稳定期预测</div>
+        <div class="section-title" style="color:#854f0b;">⚠ 锦江REIT：披露值与反推值的差异说明</div>
         <div style="font-size:12px;color:#633806;line-height:1.8;">
-          <p style="margin-bottom:8px;"><strong>估值器 DCF = ${fmt(dcfYi,2)} 亿，已精确校准匹配官方 ${realVal} 亿</strong></p>
-          <p style="margin-bottom:8px;">虽然 DCF 吻合，但<strong>运营成本率仅 23.3%</strong>——远低于正常酒店水平。原因如下：</p>
+          <p style="margin-bottom:8px;"><strong>估值器 DCF = ${fmt(dcfYi,2)} 亿，已精确校准匹配官方披露值 ${realVal} 亿</strong>（📋披露值）</p>
+          <p style="margin-bottom:8px;">但运营成本率仅 23.3%、NOI率 69.7%——均为<strong>🔄 估值器反推值，非招募说明书披露</strong>。原因如下：</p>
           <table style="width:100%;border-collapse:collapse;font-size:12px;margin:10px 0;">
             <tr style="background:#fff8e1;">
               <th style="padding:6px 10px;text-align:left;border-bottom:1px solid #e6a817;">维度</th>
-              <th style="padding:6px 10px;text-align:left;border-bottom:1px solid #e6a817;">估值器（ADR×OCC 公式）</th>
-              <th style="padding:6px 10px;text-align:left;border-bottom:1px solid #e6a817;">锦江 REIT 评估师</th>
+              <th style="padding:6px 10px;text-align:left;border-bottom:1px solid #e6a817;">📋 披露值（招募说明书）</th>
+              <th style="padding:6px 10px;text-align:left;border-bottom:1px solid #e6a817;">🔄 反推值（估值器）</th>
             </tr>
             <tr>
               <td style="padding:6px 10px;border-bottom:0.5px solid rgba(0,0,0,0.06);">ADR</td>
               <td style="padding:6px 10px;border-bottom:0.5px solid rgba(0,0,0,0.06);">376 元（<strong>现状</strong>）</td>
-              <td style="padding:6px 10px;border-bottom:0.5px solid rgba(0,0,0,0.06);">~580 元（<strong>稳定期远期</strong>）</td>
+              <td style="padding:6px 10px;border-bottom:0.5px solid rgba(0,0,0,0.06);">—（REIT估值实际用稳定期远期~580元）</td>
             </tr>
             <tr>
-              <td style="padding:6px 10px;border-bottom:0.5px solid rgba(0,0,0,0.06);">收入基数</td>
-              <td style="padding:6px 10px;border-bottom:0.5px solid rgba(0,0,0,0.06);">现状年收入</td>
-              <td style="padding:6px 10px;border-bottom:0.5px solid rgba(0,0,0,0.06);">稳定期远期预测（<strong>高于现状约 48%</strong>）</td>
+              <td style="padding:6px 10px;border-bottom:0.5px solid rgba(0,0,0,0.06);">非房收入</td>
+              <td style="padding:6px 10px;border-bottom:0.5px solid rgba(0,0,0,0.06);"><strong>未披露单店数据</strong></td>
+              <td style="padding:6px 10px;border-bottom:0.5px solid rgba(0,0,0,0.06);">🔄 328万（资产包整体数据推算）</td>
             </tr>
             <tr>
-              <td style="padding:6px 10px;border-bottom:0.5px solid rgba(0,0,0,0.06);">成本率</td>
-              <td style="padding:6px 10px;border-bottom:0.5px solid rgba(0,0,0,0.06);">opCostRate=23.3%（<strong>差值填充</strong>）</td>
-              <td style="padding:6px 10px;border-bottom:0.5px solid rgba(0,0,0,0.06);">实际 NOI 率约 50%</td>
+              <td style="padding:6px 10px;border-bottom:0.5px solid rgba(0,0,0,0.06);">运营成本率</td>
+              <td style="padding:6px 10px;border-bottom:0.5px solid rgba(0,0,0,0.06);"><strong>未披露单店数据</strong></td>
+              <td style="padding:6px 10px;border-bottom:0.5px solid rgba(0,0,0,0.06);">🔄 23.3%（<strong>差值填充</strong>——吸收收入口径差异）</td>
+            </tr>
+            <tr>
+              <td style="padding:6px 10px;border-bottom:0.5px solid rgba(0,0,0,0.06);">NOI 利润率</td>
+              <td style="padding:6px 10px;border-bottom:0.5px solid rgba(0,0,0,0.06);"><strong>未披露单店数据</strong></td>
+              <td style="padding:6px 10px;border-bottom:0.5px solid rgba(0,0,0,0.06);">🔄 69.7%（基于现状收入，非实际值）</td>
             </tr>
             <tr>
               <td style="padding:6px 10px;">首年 NOI</td>
-              <td style="padding:6px 10px;">${fmtW(noiYear1)}（基于现状收入 + 23.3%成本率填充）</td>
-              <td style="padding:6px 10px;">~${fmtW(Math.round(totalRevYear1 * 1.48 * 0.50 / 100000) * 100000)}（基于稳定期收入 + ~50%真实NOI率）</td>
+              <td style="padding:6px 10px;">📋 DCF目标 1.96亿</td>
+              <td style="padding:6px 10px;">🔄 ${fmtW(noiYear1)}</td>
             </tr>
           </table>
-          <p style="margin-top:8px;color:#854f0b;">💡 <strong>核心原因：</strong>锦江 REIT 招募说明书仅披露 21 家资产包整体数据，未拆分单店成本。估值器用<strong>现状 ADR/OCC</strong>（招股书披露），但 REIT 估值实际采用的是<strong>稳定期远期预测</strong>（收入高出约 48%）。为在现有参数框架下匹配官方估值 1.96 亿，运营成本率被校准至 23.3%——它<strong>不是真实运营成本率</strong>，而是将收入口径差异全部吸收进成本项。一旦获得稳定期收入数据、将 ADR 调至约 580 元并恢复真实成本率（~50%），估值器 DCF 将完全吻合。</p>
+          <p style="margin-top:8px;color:#854f0b;">💡 <strong>反推不一致的根本原因：</strong>锦江 REIT 招募说明书仅披露 21 家资产包<strong>整体数据</strong>，未拆分单店成本。估值器使用招股书披露的<strong>现状 ADR/OCC</strong>（376元/70.3%），但 REIT 估值实际采用<strong>稳定期远期预测</strong>（收入约高48%）。在收入基数偏低的约束下，运营成本率 23.3% 并非真实成本率，而是将<strong>「现状收入 vs 远期收入」的系统差异全部吸收进成本项</strong>后的数学等价量。</p>
         </div>
       </div>
     `);
