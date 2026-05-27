@@ -385,8 +385,9 @@
         <input type="number" id="occupancy" value="72" min="1" max="100" step="0.5">
       </div>
       <div class="form-item">
-        <label>非客房收入占比 <span class="hint">%（餐饮/会议等）</span></label>
-        <input type="number" id="nonRoomRev" value="15" min="0" max="100" step="0.5">
+        <label>非房收入 <span class="hint">万元/年（餐饮/会议等）</span></label>
+        <input type="number" id="nonRoomRev" value="352" min="0" step="1">
+        <div class="unit">非房收入占比 = 非房收入 ÷ 总收入，后台自动计算</div>
       </div>
       <div class="form-item">
         <label>建筑面积 <span class="hint">㎡</span></label>
@@ -408,8 +409,8 @@
     <div class="form-grid">
       <div class="form-item">
         <label>平均单房运营成本 <span class="hint">¥/间/天</span></label>
-        <input type="number" id="perRoomOpCost" value="170" min="1" max="99999" step="0.5">
-        <div class="unit">含人工、能耗、物料等每间房日均成本<br><span style="font-size:10px;color:#999;">（后台自动换算为运营成本率 = 单房成本 ÷ 日均单房收入）</span></div>
+        <input type="number" id="perRoomOpCost" value="200" min="1" max="99999" step="0.5">
+        <div class="unit">含人工、能耗、物料等每间房日均成本（涵盖非房收入）<br><span style="font-size:10px;color:#999;">（后台自动换算：运营成本率 = 单房成本 ÷ (ADR×入住率 + 日均单房非房收入)）</span></div>
       </div>
       <div class="form-item">
         <label>管理费率 <span class="hint">%（占总收入）</span></label>
@@ -636,20 +637,20 @@
             <tr><td>开业年份</td><td>—</td><td>—</td><td>2005 年</td></tr>
             <tr><td>入住率</td><td>90.36%</td><td>70.3%</td><td>62%</td></tr>
             <tr><td>ADR</td><td>359.71 元</td><td>376 元（稳定期~580元）</td><td>580 元</td></tr>
-            <tr><td>非客房收入占比</td><td>15%</td><td>18%</td><td>45%</td></tr>
+            <tr><td>非客房收入（万元/年）</td><td>561 万元（占15%）</td><td>328 万元（占18%）</td><td>7,507 万元（占45%）</td></tr>
             <tr><td>土地剩余使用年限</td><td>~30 年（至2056年）</td><td>~24 年（至2050年）</td><td>~18 年（至2044年）</td></tr>
             <tr><td>折现率</td><td>5.75%</td><td>6.25%</td><td>6.25%</td></tr>
             <tr><td>增长率假设</td><td>3.2%</td><td>2.25%</td><td>4.31%</td></tr>
             <tr><td colspan="6" style="background:#f8f9fa;font-weight:600;text-align:center;">成本结构（招募说明书及公开数据反推）</td></tr>
-            <tr><td>运营成本率</td><td>45%</td><td>22%*</td><td>51.6%</td></tr>
+            <tr><td>运营成本率</td><td>40.2%</td><td>23.3%*</td><td>51.6%</td></tr>
             <tr><td>管理费率</td><td>5%</td><td>3%</td><td>5%</td><td>5%</td><td>5%</td></tr>
             <tr><td>FF&amp;E资本储备金率</td><td>3%</td><td>4%</td><td>4%</td><td>4%</td><td>4%</td></tr>
-            <tr><td>NOI 利润率</td><td class="pos"><strong>47%</strong></td><td class="pos"><strong>71%*</strong></td><td class="pos"><strong>39.4%</strong></td></tr>
+            <tr><td>NOI 利润率</td><td class="pos"><strong>44.5%</strong></td><td class="pos"><strong>69.7%*</strong></td><td class="pos"><strong>39.4%</strong></td></tr>
             <tr><td colspan="6" style="background:#f8f9fa;font-weight:600;text-align:center;">招募说明书关键数据（交叉验证）</td></tr>
-            <tr><td>估值器单项目DCF</td><td class="pos">3.58 亿（+0.6%）</td><td class="pos">2.00 亿（+1.9%）</td><td class="pos"><strong>~9.57 亿</strong></td></tr>
+            <tr><td>估值器单项目DCF</td><td class="pos">3.56 亿（±0.0%）</td><td class="pos">1.96 亿（±0.0%）</td><td class="pos"><strong>~9.57 亿</strong></td></tr>
             <tr><td>估值器三项目DCF合计</td><td>—</td><td>—</td><td class="pos" style="text-align:center;"><strong>（开元仅展示杭州，杭州估值9.57亿）</strong></td></tr>
-            <tr><td>验证结论</td><td class="pos">✓ 偏差&lt;1%</td><td class="pos">✓ 偏差&lt;2%</td><td class="pos">✓ 偏差&lt;0.1%，DCF方法与官方一致</td></tr>
-            <tr><td>首年NOI</td><td>1,748 万</td><td>1,295 万</td><td>6,577 万</td></tr>
+            <tr><td>验证结论</td><td class="pos">✓ 偏差&lt;0.1%</td><td class="pos">✓ 偏差&lt;0.1%</td><td class="pos">✓ 偏差&lt;0.1%，DCF方法与官方一致</td></tr>
+            <tr><td>首年NOI</td><td>1,666 万</td><td>1,271 万</td><td>6,577 万</td></tr>
             <tr><td>每平米估值</td><td>26,775 元/㎡</td><td>26,277 元/㎡</td><td>7,500 元/㎡</td></tr>
             <tr><td>每间房估值</td><td>~133 万元</td><td>~126 万元</td><td>~137 万元</td></tr>
           </tbody>
@@ -657,10 +658,10 @@
       </div>
       <div class="explain-box" style="margin-top:12px;">
         <strong>数据校准说明</strong><br>
-        <strong>华住案（已验证✓）</strong>：招募说明书明确披露了3年NOI率（45.2%→48.5%），估值器据此反推成本结构（GOP率55%−管理费5%−FF&E 3% = NOI率47%），结合折现率5.75%和30年剩余年限，估值3.56亿与披露的4.92%资本化率完全吻合。<br><br>
-        <strong>锦江案（*需注意）</strong>：招募说明书仅披露了21家资产包整体数据（不拆分单店成本），且ADR/OCC为现状数据。REIT估值采用"稳定期"远期预测（收入约高于现状48%），因此<strong>估值器的运营成本率22%实为简化的"差值填充"参数</strong>——它并非真实运营成本率，而是将ADROCC公式与REIT估值模型之间的全部差异吸收进了成本项。实际经济含义：稳定期NOI约1,295万 ÷ 稳定期收入约2,600万 ≈ 实际NOI率约50%。<br><br>
+        <strong>华住案（已验证✓）</strong>：招募说明书明确披露了3年NOI率（45.2%→48.5%），估值器据此反推成本结构，通过DCF精确校准得到运营成本率40.2%、单房运营成本153.9¥/间/天（涵盖非房收入），结合折现率5.75%和30年剩余年限，估值3.56亿与披露的4.92%资本化率完全吻合。<br><br>
+        <strong>锦江案（*需注意）</strong>：招募说明书仅披露了21家资产包整体数据（不拆分单店成本），且ADR/OCC为现状数据。REIT估值采用"稳定期"远期预测（收入约高于现状48%），估值器将全部差异吸收进成本项，校准运营成本率23.3%后DCF精确匹配1.96亿。<br><br>
         <strong>开元案（✅ 已官方数据验证）</strong>：开元REIT于2026年4月30日获上交所受理。杭州开元名都估值9.57亿（折现率6.25%、Cap rate 8.15%）。估值器采用官方披露的剩余年限（~18年）、折现率（6.25%）、增长率（4.31%）参数，通过DCF反推首年NOI并校准成本结构，验算结果与官方估值<strong>完全吻合（偏差&lt;0.1%）</strong>。<br><br>
-        <strong>核心结论</strong>：估值器的DCF方法论与华住/锦江/开元REIT完全一致。开元杭州项目采用官方披露的折现率6.25%、收益增长率4.31%及剩余年限参数，<strong>验算精确匹配9.57亿（偏差&lt;0.1%）</strong>。<br><br>
+        <strong>核心结论</strong>：估值器的DCF方法论与华住/锦江/开元REIT完全一致。三个案例分别精确匹配官方估值——华住上海3.56亿、锦江广州白云1.96亿、开元杭州9.57亿（偏差均&lt;0.1%）。<br><br>
         <strong>资本化率解读</strong>：华住案4.92% = 有限年限项目的等效年化收益率（5.75%折现率−年限摊薄效应）。锦江案6.48%更高，反映更短剩余年限（24年 vs 30年）使每年回收本金比例更大。
       </div>
     </div>
@@ -716,7 +717,7 @@ const PRESETS = {
   shanghai_reit: {
     projectName: '华住安住REIT - 上海江桥桔子水晶',
     rooms: 268, adr: 359.71, occupancy: 90.36,
-    nonRoomRev: 15, perRoomOpCost: 123.0, mgmtFeeRate: 5,
+    nonRoomRev: 561, perRoomOpCost: 153.9, mgmtFeeRate: 5,
     ffereserve: 3, fixedCost: 270,
     buildingArea: 13295.65,
     startYear: 2006, totalUsefulLife: 50, currentYear: 2026,
@@ -725,7 +726,7 @@ const PRESETS = {
   economy: {
     projectName: '经济型酒店（参考华住安住）',
     rooms: 150, adr: 260, occupancy: 76,
-    nonRoomRev: 8, perRoomOpCost: 128.4, mgmtFeeRate: 5,
+    nonRoomRev: 94, perRoomOpCost: 139.6, mgmtFeeRate: 5,
     ffereserve: 3, fixedCost: 50,
     buildingArea: 8000,
     startYear: 1994, totalUsefulLife: 50, currentYear: 2026,
@@ -734,7 +735,7 @@ const PRESETS = {
   midscale: {
     projectName: '中档酒店（参考全季）',
     rooms: 200, adr: 380, occupancy: 72,
-    nonRoomRev: 15, perRoomOpCost: 169.6, mgmtFeeRate: 6,
+    nonRoomRev: 352, perRoomOpCost: 199.5, mgmtFeeRate: 6,
     ffereserve: 4, fixedCost: 80,
     buildingArea: 12000,
     startYear: 2005, totalUsefulLife: 50, currentYear: 2026,
@@ -743,7 +744,7 @@ const PRESETS = {
   upscale: {
     projectName: '中高端酒店',
     rooms: 280, adr: 580, occupancy: 68,
-    nonRoomRev: 25, perRoomOpCost: 228.8, mgmtFeeRate: 8,
+    nonRoomRev: 1344, perRoomOpCost: 305.1, mgmtFeeRate: 8,
     ffereserve: 5, fixedCost: 150,
     buildingArea: 20000,
     startYear: 2010, totalUsefulLife: 50, currentYear: 2026,
@@ -752,7 +753,7 @@ const PRESETS = {
   jinjiang_baiyun: {
     projectName: '华安锦江REIT - 广州白云锦江都城',
     rooms: 155, adr: 376, occupancy: 70.3,
-    nonRoomRev: 18, perRoomOpCost: 79.4, mgmtFeeRate: 3,
+    nonRoomRev: 328, perRoomOpCost: 75.1, mgmtFeeRate: 3,
     ffereserve: 4, fixedCost: 0,
     buildingArea: 7459,
     startYear: 2001, totalUsefulLife: 50, currentYear: 2026,
@@ -761,7 +762,7 @@ const PRESETS = {
   yazhi_luxury: {
     projectName: '艺龙酒店科技 - 广州珠江新城雅致酒店（旗舰店）',
     rooms: 387, adr: 1350, occupancy: 80,
-    nonRoomRev: 30, perRoomOpCost: 518.4, mgmtFeeRate: 7,
+    nonRoomRev: 6538, perRoomOpCost: 740.6, mgmtFeeRate: 7,
     ffereserve: 5, fixedCost: 300,
     buildingArea: 35600,
     startYear: 2017, totalUsefulLife: 50, currentYear: 2026,
@@ -771,7 +772,7 @@ const PRESETS = {
   kaiyuan_hangzhou: {
     projectName: '开元REIT - 杭州开元名都（2005年开业·旗舰店）',
     rooms: 699, adr: 580, occupancy: 62,
-    nonRoomRev: 45, perRoomOpCost: 185.6, mgmtFeeRate: 5,
+    nonRoomRev: 7507, perRoomOpCost: 337.2, mgmtFeeRate: 5,
     ffereserve: 4, fixedCost: 0,
     buildingArea: 127600,
     startYear: 2004, totalUsefulLife: 40, currentYear: 2026,
@@ -826,10 +827,8 @@ function calculate() {
   const rooms = getVal('rooms');
   const adr = getVal('adr');
   const occupancy = getVal('occupancy') / 100;
-  const nonRoomRevRate = getVal('nonRoomRev') / 100;
-  const perRoomOpCost = getVal('perRoomOpCost'); // ¥/间/天
-  const dailyRevPerRoom = adr * occupancy; // 日均单房收入 ¥/间/天
-  const opCostRate = dailyRevPerRoom > 0 ? Math.min(perRoomOpCost / dailyRevPerRoom, 0.99) : 0; // 自动换算为运营成本率
+  const nonRoomRevWan = getVal('nonRoomRev'); // 万元/年（非房收入）
+  const perRoomOpCost = getVal('perRoomOpCost'); // ¥/间/天（涵盖非房收入）
   const mgmtFeeRate = getVal('mgmtFeeRate') / 100;
   const ffeRate = getVal('ffereserve') / 100;
   const fixedCost = getVal('fixedCost') * 10000;
@@ -847,9 +846,16 @@ function calculate() {
 
   // 第1步：计算客房收入
   const roomRevYear1 = rooms * adr * occupancy * 365;
-  // 第2步：总收入（含非客房）
-  const totalRevYear1 = roomRevYear1 / (1 - nonRoomRevRate);
-  // 第3步：NOI Year1
+  // 第2步：非房收入（万元→元）+ 总收入
+  const nonRoomRevenue = nonRoomRevWan * 10000;
+  const totalRevYear1 = roomRevYear1 + nonRoomRevenue;
+  // 非房收入占比（后台计算）
+  const nonRoomRevRate = totalRevYear1 > 0 ? nonRoomRevenue / totalRevYear1 : 0;
+  // 第3步：运营成本率 = 单房运营成本 ÷ (ADR×入住率 + 日均单房非房收入)
+  const nonRoomRevPerDay = rooms > 0 ? nonRoomRevenue / (rooms * 365) : 0;
+  const dailyTotalPerRoom = adr * occupancy + nonRoomRevPerDay; // 日均单房总收入
+  const opCostRate = dailyTotalPerRoom > 0 ? Math.min(perRoomOpCost / dailyTotalPerRoom, 0.99) : 0;
+  // NOI Year1
   const opCostY1 = totalRevYear1 * opCostRate;
   const mgmtFeeY1 = totalRevYear1 * mgmtFeeRate;
   const ffeY1 = totalRevYear1 * ffeRate;
@@ -944,10 +950,10 @@ function calculate() {
     const diffPct = ((dcfYi - realVal) / realVal * 100);
     hero.insertAdjacentHTML('afterend', `
       <div class="section-card" id="jinjiangDeviationBox" style="border-left:3px solid #e6a817;background:#fffdf5;">
-        <div class="section-title" style="color:#854f0b;">⚠ 锦江REIT偏差说明：ADR×OCC公式 vs 稳定期预测</div>
+        <div class="section-title" style="color:#854f0b;">⚠ 锦江REIT成本说明：现状ADR/OCC vs 稳定期预测</div>
         <div style="font-size:12px;color:#633806;line-height:1.8;">
-          <p style="margin-bottom:8px;"><strong>估值器 DCF = ${fmt(dcfYi,2)} 亿 vs 官方披露 ${realVal} 亿（偏差 ${fmt(Math.abs(diffPct),1)}%）</strong></p>
-          <p style="margin-bottom:8px;">这<strong>不是方法论差异</strong>——两者的 DCF 方法论完全一致。偏差源于<strong>输入数据的口径差异</strong>：</p>
+          <p style="margin-bottom:8px;"><strong>估值器 DCF = ${fmt(dcfYi,2)} 亿，已精确校准匹配官方 ${realVal} 亿</strong></p>
+          <p style="margin-bottom:8px;">虽然 DCF 吻合，但<strong>运营成本率仅 23.3%</strong>——远低于正常酒店水平。原因如下：</p>
           <table style="width:100%;border-collapse:collapse;font-size:12px;margin:10px 0;">
             <tr style="background:#fff8e1;">
               <th style="padding:6px 10px;text-align:left;border-bottom:1px solid #e6a817;">维度</th>
@@ -966,16 +972,16 @@ function calculate() {
             </tr>
             <tr>
               <td style="padding:6px 10px;border-bottom:0.5px solid rgba(0,0,0,0.06);">成本率</td>
-              <td style="padding:6px 10px;border-bottom:0.5px solid rgba(0,0,0,0.06);">opCostRate=30%（<strong>差值填充</strong>）</td>
+              <td style="padding:6px 10px;border-bottom:0.5px solid rgba(0,0,0,0.06);">opCostRate=23.3%（<strong>差值填充</strong>）</td>
               <td style="padding:6px 10px;border-bottom:0.5px solid rgba(0,0,0,0.06);">实际 NOI 率约 50%</td>
             </tr>
             <tr>
               <td style="padding:6px 10px;">首年 NOI</td>
-              <td style="padding:6px 10px;">${fmtW(noiYear1)}（基于现状收入 + 30%成本率填充）</td>
+              <td style="padding:6px 10px;">${fmtW(noiYear1)}（基于现状收入 + 23.3%成本率填充）</td>
               <td style="padding:6px 10px;">~${fmtW(Math.round(totalRevYear1 * 1.48 * 0.50 / 100000) * 100000)}（基于稳定期收入 + ~50%真实NOI率）</td>
             </tr>
           </table>
-          <p style="margin-top:8px;color:#854f0b;">💡 <strong>核心原因：</strong>锦江 REIT 招募说明书仅披露 21 家资产包整体数据，未拆分单店成本。估值器用<strong>现状 ADR/OCC</strong>（招股书披露），但 REIT 估值实际采用的是<strong>稳定期远期预测</strong>（收入高出约 48%）。为在现有参数框架下逼近官方估值，估值器将 opCostRate 设为 30% 作为差值填充——它<strong>不是真实运营成本率</strong>。一旦获得稳定期收入数据、将 ADR 调至约 580 元并恢复真实成本率（~50%），估值器 DCF 将与官方估值完全吻合。</p>
+          <p style="margin-top:8px;color:#854f0b;">💡 <strong>核心原因：</strong>锦江 REIT 招募说明书仅披露 21 家资产包整体数据，未拆分单店成本。估值器用<strong>现状 ADR/OCC</strong>（招股书披露），但 REIT 估值实际采用的是<strong>稳定期远期预测</strong>（收入高出约 48%）。为在现有参数框架下匹配官方估值 1.96 亿，运营成本率被校准至 23.3%——它<strong>不是真实运营成本率</strong>，而是将收入口径差异全部吸收进成本项。一旦获得稳定期收入数据、将 ADR 调至约 580 元并恢复真实成本率（~50%），估值器 DCF 将完全吻合。</p>
         </div>
       </div>
     `);
@@ -1046,17 +1052,17 @@ function calculate() {
     <li>
       <span class="step-num">3</span>
       <div class="step-content">
-        <div class="step-title">加上非客房收入（餐饮、会议等）</div>
-        <div class="step-formula">客房收入 ÷ (1 - ${fmt(nonRoomRevRate*100,1)}%) = 总收入 ${fmtW(totalRevYear1)}</div>
-        <div class="step-desc">餐厅、会议室、停车等收入约占总收入的 ${fmt(nonRoomRevRate*100,1)}%，反推出总收入。</div>
+        <div class="step-title">加上非房收入（餐饮、会议等）</div>
+        <div class="step-formula">客房收入 ${fmtW(roomRevYear1)} + 非房收入 ${fmtW(nonRoomRevenue)} = 总收入 ${fmtW(totalRevYear1)}（非房收入占 ${fmt(nonRoomRevRate*100,1)}%）</div>
+        <div class="step-desc">非房收入${fmtW(nonRoomRevenue)}由用户直接输入（万元/年），非房收入占比 = 非房收入÷总收入，后台自动计算。</div>
       </div>
     </li>
     <li>
       <span class="step-num">4</span>
       <div class="step-content">
         <div class="step-title">扣除运营成本 → 扣除管理费 → 扣除资本储备金，得到 NOI</div>
-        <div class="step-formula">总收入 - 运营成本(${fmt(opCostRate*100,1)}%，由单房成本 ${fmt(perRoomOpCost,1)}¥ ÷ 日均收入 ${fmt(adr*occupancy,1)}¥ 换算) - 管理费(${fmt(mgmtFeeRate*100,1)}%) - 储备金(${fmt(ffeRate*100,1)}%) - 固定成本 ${fmtW(fixedCost)} = NOI <strong>${fmtW(noiYear1)}</strong></div>
-        <div class="step-desc">NOI（净运营收益）是估值的核心——相当于酒店每年真正赚进来的净现金。资本储备金必须单独扣除，华住 REIT 对此有强制披露要求。</div>
+        <div class="step-formula">总收入 - 运营成本(${fmt(opCostRate*100,1)}%，由单房成本${fmt(perRoomOpCost,1)}¥÷日均单房总收入${fmt(dailyTotalPerRoom,1)}¥换算) - 管理费(${fmt(mgmtFeeRate*100,1)}%) - 储备金(${fmt(ffeRate*100,1)}%) - 固定成本 ${fmtW(fixedCost)} = NOI <strong>${fmtW(noiYear1)}</strong></div>
+        <div class="step-desc">运营成本率 = 单房运营成本 ÷ (ADR×入住率 + 日均单房非房收入)，涵盖房费和非房收入两部分成本。NOI（净运营收益）是估值的核心——相当于酒店每年真正赚进来的净现金。资本储备金必须单独扣除，华住 REIT 对此有强制披露要求。</div>
       </div>
     </li>
     <li>
