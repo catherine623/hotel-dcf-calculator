@@ -339,7 +339,7 @@
 <div class="page-wrap">
 
   <h1>酒店资产估值计算器</h1>
-  <p class="subtitle">基于华住&amp;锦江&amp;开元 REITs 估值方法 · 收益法（现金流折现 DCF）· 五个REIT案例已官方数据验算</p>
+  <p class="subtitle">基于华住&amp;锦江&amp;开元 REITs 估值方法 · 收益法（现金流折现 DCF）· 三个REIT案例已官方数据验算</p>
 
   <!-- 预设方案 -->
   <div class="section-card">
@@ -354,7 +354,6 @@
       <button class="preset-btn" onclick="loadPreset('kaiyuan_hangzhou')" style="background:#e8f5e9;border-color:#2e7d32;color:#1b5e20;font-weight:500;">★ 开元REIT杭州开元名都（估值9.57亿）</button>
     </div>
     <div class="preset-row" style="margin-top:0;">
-      <button class="preset-btn" onclick="loadPreset('yazhi_luxury')" style="background:#fdf2f8;border-color:#c2185b;color:#880e4f;font-weight:500;">◆ 雅致酒店·广州珠江新城</button>
       <button class="preset-btn" onclick="loadPreset('economy')">经济型酒店</button>
       <button class="preset-btn" onclick="loadPreset('midscale')">中档酒店（全季）</button>
       <button class="preset-btn" onclick="loadPreset('upscale')">中高端酒店</button>
@@ -724,9 +723,9 @@ const PRESETS = {
     discountRate: 5.75, annualGrowth: 3.2, terminalMultiple: 0
   },
   economy: {
-    projectName: '经济型酒店（参考华住安住）',
+    projectName: '经济型酒店',
     rooms: 150, adr: 260, occupancy: 76,
-    nonRoomRev: 94, perRoomOpCost: 139.6, mgmtFeeRate: 5,
+    nonRoomRev: 120, perRoomOpCost: 100, mgmtFeeRate: 5,
     ffereserve: 3, fixedCost: 50,
     buildingArea: 8000,
     startYear: 1994, totalUsefulLife: 50, currentYear: 2026,
@@ -758,15 +757,6 @@ const PRESETS = {
     buildingArea: 7459,
     startYear: 2001, totalUsefulLife: 50, currentYear: 2026,
     discountRate: 6.25, annualGrowth: 2.25, terminalMultiple: 0
-  },
-  yazhi_luxury: {
-    projectName: '艺龙酒店科技 - 广州珠江新城雅致酒店（旗舰店）',
-    rooms: 387, adr: 1350, occupancy: 80,
-    nonRoomRev: 6538, perRoomOpCost: 740.6, mgmtFeeRate: 7,
-    ffereserve: 5, fixedCost: 300,
-    buildingArea: 35600,
-    startYear: 2017, totalUsefulLife: 50, currentYear: 2026,
-    discountRate: 7.0, annualGrowth: 3.5, terminalMultiple: 0
   },
   // === 开元REIT （按招募说明书官方估值校准：杭州9.57亿） ===
   kaiyuan_hangzhou: {
