@@ -409,9 +409,9 @@
     </div>
     <div class="form-grid">
       <div class="form-item">
-        <label>运营成本率 <span class="hint">%（占总收入）</span></label>
-        <input type="number" id="opCostRate" value="62" min="1" max="99" step="0.5">
-        <div class="unit">含人工、能耗、物料等直接运营费用</div>
+        <label>平均单房运营成本 <span class="hint">¥/间/天</span></label>
+        <input type="number" id="perRoomOpCost" value="170" min="1" max="99999" step="0.5">
+        <div class="unit">含人工、能耗、物料等每间房日均成本<br><span style="font-size:10px;color:#999;">（后台自动换算为运营成本率 = 单房成本 ÷ 日均单房收入）</span></div>
       </div>
       <div class="form-item">
         <label>管理费率 <span class="hint">%（占总收入）</span></label>
@@ -720,7 +720,7 @@ const PRESETS = {
   shanghai_reit: {
     projectName: '华住安住REIT - 上海江桥桔子水晶',
     rooms: 268, adr: 359.71, occupancy: 90.36,
-    nonRoomRev: 15, opCostRate: 37.8, mgmtFeeRate: 5,
+    nonRoomRev: 15, perRoomOpCost: 123.0, mgmtFeeRate: 5,
     ffereserve: 3, fixedCost: 270,
     buildingArea: 13295.65,
     startYear: 2006, totalUsefulLife: 50, currentYear: 2026,
@@ -729,7 +729,7 @@ const PRESETS = {
   economy: {
     projectName: '经济型酒店（参考华住安住）',
     rooms: 150, adr: 260, occupancy: 76,
-    nonRoomRev: 8, opCostRate: 65, mgmtFeeRate: 5,
+    nonRoomRev: 8, perRoomOpCost: 128.4, mgmtFeeRate: 5,
     ffereserve: 3, fixedCost: 50,
     buildingArea: 8000,
     startYear: 1994, totalUsefulLife: 50, currentYear: 2026,
@@ -738,7 +738,7 @@ const PRESETS = {
   midscale: {
     projectName: '中档酒店（参考全季）',
     rooms: 200, adr: 380, occupancy: 72,
-    nonRoomRev: 15, opCostRate: 62, mgmtFeeRate: 6,
+    nonRoomRev: 15, perRoomOpCost: 169.6, mgmtFeeRate: 6,
     ffereserve: 4, fixedCost: 80,
     buildingArea: 12000,
     startYear: 2005, totalUsefulLife: 50, currentYear: 2026,
@@ -747,7 +747,7 @@ const PRESETS = {
   upscale: {
     projectName: '中高端酒店',
     rooms: 280, adr: 580, occupancy: 68,
-    nonRoomRev: 25, opCostRate: 58, mgmtFeeRate: 8,
+    nonRoomRev: 25, perRoomOpCost: 228.8, mgmtFeeRate: 8,
     ffereserve: 5, fixedCost: 150,
     buildingArea: 20000,
     startYear: 2010, totalUsefulLife: 50, currentYear: 2026,
@@ -756,7 +756,7 @@ const PRESETS = {
   jinjiang_baiyun: {
     projectName: '华安锦江REIT - 广州白云锦江都城',
     rooms: 155, adr: 376, occupancy: 70.3,
-    nonRoomRev: 18, opCostRate: 30, mgmtFeeRate: 3,
+    nonRoomRev: 18, perRoomOpCost: 79.4, mgmtFeeRate: 3,
     ffereserve: 4, fixedCost: 0,
     buildingArea: 7459,
     startYear: 2001, totalUsefulLife: 50, currentYear: 2026,
@@ -765,7 +765,7 @@ const PRESETS = {
   yazhi_luxury: {
     projectName: '艺龙酒店科技 - 广州珠江新城雅致酒店（旗舰店）',
     rooms: 387, adr: 1350, occupancy: 80,
-    nonRoomRev: 30, opCostRate: 48, mgmtFeeRate: 7,
+    nonRoomRev: 30, perRoomOpCost: 518.4, mgmtFeeRate: 7,
     ffereserve: 5, fixedCost: 300,
     buildingArea: 35600,
     startYear: 2017, totalUsefulLife: 50, currentYear: 2026,
@@ -775,7 +775,7 @@ const PRESETS = {
   kaiyuan_hangzhou: {
     projectName: '开元REIT - 杭州开元名都（2005年开业·旗舰店）',
     rooms: 699, adr: 580, occupancy: 62,
-    nonRoomRev: 45, opCostRate: 51.6, mgmtFeeRate: 5,
+    nonRoomRev: 45, perRoomOpCost: 185.6, mgmtFeeRate: 5,
     ffereserve: 4, fixedCost: 0,
     buildingArea: 127600,
     startYear: 2004, totalUsefulLife: 40, currentYear: 2026,
@@ -784,7 +784,7 @@ const PRESETS = {
   kaiyuan_wenzhou: {
     projectName: '开元REIT - 温州开元名都（2022年开业·德胧+万豪双品牌）',
     rooms: 346, adr: 558, occupancy: 58,
-    nonRoomRev: 40, opCostRate: 59.4, mgmtFeeRate: 5,
+    nonRoomRev: 40, perRoomOpCost: 192.2, mgmtFeeRate: 5,
     ffereserve: 4, fixedCost: 0,
     buildingArea: 42800,
     startYear: 2018, totalUsefulLife: 40, currentYear: 2026,
@@ -793,7 +793,7 @@ const PRESETS = {
   kaiyuan_shengzhou: {
     projectName: '开元REIT - 嵊州开元名都（2022年开业·县级市地标）',
     rooms: 384, adr: 395, occupancy: 55,
-    nonRoomRev: 35, opCostRate: 72.0, mgmtFeeRate: 5,
+    nonRoomRev: 35, perRoomOpCost: 156.4, mgmtFeeRate: 5,
     ffereserve: 4, fixedCost: 0,
     buildingArea: 59100,
     startYear: 2009, totalUsefulLife: 50, currentYear: 2026,
@@ -849,7 +849,9 @@ function calculate() {
   const adr = getVal('adr');
   const occupancy = getVal('occupancy') / 100;
   const nonRoomRevRate = getVal('nonRoomRev') / 100;
-  const opCostRate = getVal('opCostRate') / 100;
+  const perRoomOpCost = getVal('perRoomOpCost'); // ¥/间/天
+  const dailyRevPerRoom = adr * occupancy; // 日均单房收入 ¥/间/天
+  const opCostRate = dailyRevPerRoom > 0 ? Math.min(perRoomOpCost / dailyRevPerRoom, 0.99) : 0; // 自动换算为运营成本率
   const mgmtFeeRate = getVal('mgmtFeeRate') / 100;
   const ffeRate = getVal('ffereserve') / 100;
   const fixedCost = getVal('fixedCost') * 10000;
@@ -1077,7 +1079,7 @@ function calculate() {
       <span class="step-num">4</span>
       <div class="step-content">
         <div class="step-title">扣除运营成本 → 扣除管理费 → 扣除资本储备金，得到 NOI</div>
-        <div class="step-formula">总收入 - 运营成本(${fmt(opCostRate*100,1)}%) - 管理费(${fmt(mgmtFeeRate*100,1)}%) - 储备金(${fmt(ffeRate*100,1)}%) - 固定成本 ${fmtW(fixedCost)} = NOI <strong>${fmtW(noiYear1)}</strong></div>
+        <div class="step-formula">总收入 - 运营成本(${fmt(opCostRate*100,1)}%，由单房成本 ${fmt(perRoomOpCost,1)}¥ ÷ 日均收入 ${fmt(adr*occupancy,1)}¥ 换算) - 管理费(${fmt(mgmtFeeRate*100,1)}%) - 储备金(${fmt(ffeRate*100,1)}%) - 固定成本 ${fmtW(fixedCost)} = NOI <strong>${fmtW(noiYear1)}</strong></div>
         <div class="step-desc">NOI（净运营收益）是估值的核心——相当于酒店每年真正赚进来的净现金。资本储备金必须单独扣除，华住 REIT 对此有强制披露要求。</div>
       </div>
     </li>
